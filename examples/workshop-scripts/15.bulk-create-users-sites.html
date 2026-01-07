@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        const cmsUrl = "https://workshops.cascadecms.com/";
+        const cmsAPI = "";
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+
+        /* Note: Bonus script - This script automates the creation of Cascade users by reading in list from CSV file (users.csv),
+          creating individual sites and updating site access for each user.  */
+
+        // createUsers();
+
+        // createSites();
+
+        // updateSiteAccess();
+
+        function createUsers() {
+            Papa.parse('csv/users2.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function (h) {
+                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
+                },
+                complete: function (result) {
+                    console.log(result);
+                    result.data.forEach(function (user, i) {
+                        setTimeout(function () {
+                            console.log(user);
+                            createAsset({
+                                asset: {
+                                    user: {
+                                        authType: "normal",
+                                        email: user.email.toLowerCase(),
+                                        enabled: true,
+                                        fullName: user.firstname + ' ' + user.lastname,
+                                        groups: "Web Services",
+                                        password: "cuc24-webservices",
+                                        roles: "Contributor",
+                                        username: user.email.toLowerCase(),
+                                    }
+                                }
+                            }).then(function (result) {
+                                console.log(result);
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }, i * 400);
+                    });
+                }
+            });
+        }
+
+        function createSites() {
+            Papa.parse('csv/users2.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function (h) {
+                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
+                },
+                complete: function (result) {
+                    console.log(result);
+                    result.data.forEach(function (user) {
+                        console.log(user);
+                        copySite({
+                            originalSiteName: "_WS-Master",
+                            newSiteName: "WS-" + user.lastname
+                        }).then(function (result) {
+                            console.log(result);
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    });
+                }
+            });
+        }
+
+        function updateSiteAccess() {
+            Papa.parse('csv/users2.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function (h) {
+                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
+                },
+                complete: function (result) {
+                    console.log(result);
+                    result.data.forEach(function (user) {
+                        console.log(user);
+                        readAsset({
+                            type: "site",
+                            siteName: "%2520", // have to double escape the site name to read Site by name instead of ID
+                            path: "WS-" + user.lastname
+                        }).then(function (result) {
+                            console.log(result);
+                            result.apiReturn.asset.site.roleAssignments = [{
+                                "roleId": "8",
+                                "roleName": "Site Administrator",
+                                "users": user.email.toLowerCase(),
+                            }]
+
+                            editAsset({
+                                asset: result.apiReturn,
+                            }).then(function (result) {
+                                console.log(result);
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    });
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

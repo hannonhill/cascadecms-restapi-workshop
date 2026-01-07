@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        /* Note: Creating the skeleton of new pages for a site redesign can be extremely helpful
+           creating them manually, not so much. to ensure pages can be created without errors, 
+           we want to ensure the folders they have to go in already exist 
+           its easier and faster to create all folders first before creating any pages
+           the 2 functions below could be combined into a single, bigger, more complex function but I prefer we keep it simple
+           like the principle... and the band! */
+
+        /* Exercise 1: Automate creation of "skeleton" folders and pages by reading from two csv files 
+           (/workshop-scripts/csv/folders.csv) and (/workshop-scripts/csv/folders.csv) */
+
+        /* Step 1.1: Add your site name to the siteName variable  */
+        /* Step 1.2: Follow instructor's demonstration as the script is reviewed. We will create the folders first then create 
+           pages to populate in the folders in the Redesign folder on your site */
+
+
+        var siteName = "_WS-Master"; // fill in
+
+        // createFolders();
+
+        createPages();
+
+        function createFolders() {
+            // Note: you'll want to make sure 
+            Papa.parse('csv/folders.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function (h) {
+                    return h.replace(/[\W_]+/g, "").trim();
+                },
+                complete: function (result) {
+                    console.log(result);
+                    result.data.forEach(function (f, i) {
+                        setTimeout(function () {
+                            // console.log(f);
+                            var path = f.path;
+                            var parentFolder = path.substr(0, path.lastIndexOf("/"));
+                            var folderName = path.substring(path.lastIndexOf("/") + 1);
+                            /* Note: using the path of the new folder we separate the folder name and the parent folder of that folder
+                                you'll want to make sure any parent folder needed for sub folders are created first by having parent folders listed before sub folders in the csv
+                                EVEN THEN, for one reason or another, some operations finish faster then others even though they started later
+                                a simple workaround is to add a delay to the loop  */
+
+                            // #1 first we copy
+                            copyAsset({
+                                type: "folder",
+                                path: f.baseasset,
+                                siteName: siteName,
+                                copyParameters: {
+                                    newName: folderName,
+                                    destinationContainerIdentifier: {
+                                        type: "folder",
+                                        path: {
+                                            path: parentFolder,
+                                            siteName: siteName,
+                                        }
+                                    }
+                                }
+                            }).then(function (result) {
+                                console.log(result);
+                                // #2 then we read
+                                readAsset({
+                                    type: "folder",
+                                    path: parentFolder + "/" + folderName,
+                                    siteName: siteName,
+                                    // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                                }).then(function (result) {
+                                    console.log(result);
+                                    // #3 then we edit
+                                    result.apiReturn.asset.folder.metadata.displayName = f.displayname;
+                                    result.apiReturn.asset.folder.shouldBeIndexed = f.indexable;
+                                    result.apiReturn.asset.folder.shouldBePublished = f.publishable;
+                                    editAsset({
+                                        asset: result.apiReturn,
+                                    }).then(function (result) {
+                                        console.log(result);
+                                    }).catch(function (error) {
+                                        console.log(error);
+                                    });
+                                    // Note: using the edit function, we send back the edited object 
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }, i * 400);
+                    });
+                }
+            });
+        }
+
+        function createPages() {
+            // Note: you'll want to make sure 
+            Papa.parse('csv/pages.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function (h) {
+                    return h.replace(/[\W_]+/g, "").trim();
+                },
+                complete: function (result) {
+                    console.log(result);
+                    result.data.forEach(function (p, i) {
+                        setTimeout(function () {
+                            // console.log(p);
+                            var path = p.path;
+                            var parentFolder = path.substr(0, path.lastIndexOf("/"));
+                            var pageName = path.substring(path.lastIndexOf("/") + 1);
+
+                            // #1 first we copy
+                            copyAsset({
+                                type: "page",
+                                path: p.baseasset,
+                                siteName: siteName,
+                                copyParameters: {
+                                    newName: pageName,
+                                    destinationContainerIdentifier: {
+                                        type: "folder",
+                                        path: {
+                                            path: parentFolder,
+                                            siteName: siteName,
+                                        }
+                                    }
+                                }
+                            }).then(function (result) {
+                                console.log(result);
+                                // #2 then we read
+                                readAsset({
+                                    type: "page",
+                                    path: parentFolder + "/" + pageName,
+                                    siteName: siteName,
+                                    // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                                }).then(function (result) {
+                                    console.log(result);
+                                    // #3 then we edit
+                                    result.apiReturn.asset.page.shouldBePublished = p.publishable;
+                                    result.apiReturn.asset.page.shouldBeIndexed = p.indexable;
+                                    result.apiReturn.asset.page.metadata.displayName = p.displayname;
+                                    result.apiReturn.asset.page.metadata.title = p.title;
+                                    result.apiReturn.asset.page.metadata.author = p.author;
+                                    result.apiReturn.asset.page.metadata.keywords = p.keywords;
+                                    result.apiReturn.asset.page.metadata.summary = p.summary;
+                                    result.apiReturn.asset.page.metadata.metaDescription = p.description;
+                                    // result.apiReturn.asset.page.metadata.startDate = p.startDate; // required format: MMM DD, YYYY hh:mm:ss A
+                                    // result.apiReturn.asset.page.metadata.endDate = p.endDate; // required format: MMM DD, YYYY hh:mm:ss A
+                                    // result.apiReturn.asset.page.metadata.reviewDate = p.reviewDate; // required format: MMM DD, YYYY hh:mm:ss A
+                                    delete result.apiReturn.asset.page.expirationFolderId; // when replacing an asset value that has both id and path, you must delete one and replace the other
+                                    result.apiReturn.asset.page.expirationFolderPath = p.expfolderpath;
+                                    editAsset({
+                                        asset: result.apiReturn,
+                                    }).then(function (result) {
+                                        console.log(result);
+                                    }).catch(function (error) {
+                                        console.log(error);
+                                    });
+                                    // Note: using the edit function, we send back the edited object 
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }, i * 400);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

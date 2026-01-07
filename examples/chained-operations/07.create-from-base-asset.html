@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // Note: to create an asset from another asset (like a base asset) we copy an asset, read the copy then edit the copy
+
+        /* Exercise 1: Create an asset from copying the Interior page base asset and editing the copy */
+
+        // Note: we'll set up some VARS to make things easier down the road 
+
+        /* Step 1.1: Locate the Interior page base asset (/_cms/base-assets/interior) and add the asset ID on line 22 */
+        /* Step 1.2: Add a new system name for the new page we will be creating on line 23 */
+        /* Step 1.3: Add the folder path and folder site name for where the new page should be created on line 24/25*/
+        /* Step 1.4: Follow instructor's demonstration as the chained operations are reviewed */
+
+        var assetType = "page";
+        var baseAssetID = "aeeb4b120a0000c954bf54672e7d85d2"; // fill in
+        var newName = "new-page"; // fill in
+        var newFolderPath = "/"; // fill in
+        var newFolderSiteName = "_WS-Master"; // fill in
+
+        // #1 first we copy
+        copyAsset({
+            type: assetType,
+            id: baseAssetID,
+            copyParameters: {
+                newName: newName,
+                destinationContainerIdentifier: {
+                    type: "folder",
+                    path: {
+                        path: newFolderPath,
+                        siteName: newFolderSiteName
+                    }
+                }
+            }
+        }).then(function (result) {
+            console.log(result);
+            // #2 then we read
+            readAsset({
+                type: assetType,
+                path: newFolderPath + "/" + newName,
+                siteName: newFolderSiteName,
+                // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                /*
+                // path: result.sent.copyParameters.destinationContainerIdentifier.path.path + "/" + result.sent.copyParameters.newName,
+                // siteName: result.sent.copyParameters.destinationContainerIdentifier.path.siteName,
+                // another option is to use the parameters we passed in from result
+                */
+            }).then(function (result) {
+                console.log(result);
+                // #3 then we edit
+                result.apiReturn.asset.page.metadata.title = "NEW COPY TITLE";
+                editAsset({
+                    asset: result.apiReturn,
+                }).then(function (result) {
+                    console.log(result);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                // Note: using the edit function, we send back the edited object, in this case, the updated page
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

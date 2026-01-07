@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        /* Note: Think of subscribers as relationships
+           listing the subscribers of a content type will give you pages
+           listing the subscribers of a page will give you blocks/pages where that page is attached/linked 
+           listing the subscribers of a block will give you blocks/pages where that block is attached
+           listing the subscribers of a file will give you blocks/pages where that file is attached/linked  */
+
+        /* Exercise 1: Get the subscribers of a block using asset ID  */
+
+        /* Step 1.1: Add the ID of the video block located here - /blocks/video/video-1 on line 23
+        /* Step 1.2: Save, open file in browser, view console log */
+
+        listSubscribers({
+            type: "block",
+            id: "aeeb3df00a0000c954bf5467c0512543", // fill in
+        }).then(function (result) {
+            console.log(result);
+            console.log(result.apiReturn.subscribers);
+            // Note: You can see all subscribers (relationships) created by linking and/or attaching by using dot notation to drill down to the subscribers array
+            // console.log(result.apiReturn.manualSubscribers);
+            // Note: Manual subscribers are also available 
+        }).catch(function (error) {
+            console.log(error);
+            // Note: if you see the error "The model returned a null response." make sure the asset type is correct
+        });
+    </script>
+</body>
+
+</html>

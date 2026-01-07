@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        /* Exercise 1: The Cascade University has made the decision to officially change the name of their
+          "College of Computing" school to "College of Engineering" school. In this exercise we will be using
+          web services to 1. update all News Posts that have the old "College of Computer" in their "College" custom 
+          metadata dropdown field and 2. loop through all News Post WYSIWYG row data (Block & On Page) replacing 
+          both with the new school name of "College of Engineering". */
+
+        /* Note: If you change the value of data definition field option (College metadata field), it does NOT 
+           auto update on pages or blocks. For example, if you have a College drop down for your news posts and 
+           a college changes it's name the best way to get all pages using that drop down updated is to ADD the
+           new college name along side the old name and then use web services to update all pages with the new 
+           values  */
+
+        /* Step 1.1: Locate the News Post (Post) content type asset ID and add it on line 40 AND line 82 */
+        /* Step 1.2: Follow instructor's demonstration as the script is reviewed. */
+
+        var oldCollege = "College of Computing";
+        var newCollege = "College of Engineering";
+        var blocks = [];
+
+        /* Note: we know we have to update a value in custom metadata
+            this metadata set that is attached to pages via content type
+            lets get all news pages with content type "Post" */
+
+        // updateMetadata();
+
+        updateContent();
+
+        function updateMetadata() {
+            listSubscribers({
+                type: "contenttype",
+                id: "aeeb3e780a0000c954bf54679212cf6c", // fill in
+            }).then(function (result) {
+                // console.log(result);
+                var pages = result.apiReturn.subscribers; // Note: drill down to the array of children in the folder
+                pages.forEach(function (page) {
+                    // console.log(page);
+                    if (page.type == "page") { // Note: although only pages come up for this contenttype, it doesn't hurt to throw in a check just in case
+                        readAsset({
+                            type: "page",
+                            id: page.id,
+                        }).then(function (result) {
+                            // console.log(result);
+                            var customMetadata = result.apiReturn.asset.page.metadata.dynamicFields;
+                            var collegeField = customMetadata[1].fieldValues[0];
+                            // Note: again, all structuredData nodes are arrays of objects, even if there's only one object at the time
+                            // console.log(collegeField);
+                            if (collegeField.value == oldCollege) { // Note: check if college is old college 
+                                collegeField.value = newCollege;    // if so, replace with new college and update the page
+                                editAsset({
+                                    asset: result.apiReturn,
+                                }).then(function (result) {
+                                    console.log(result);
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+
+        // Note: looks like the old College name is used in Post content
+        // BRICKS would've been great here but its ok, web services to the rescue 
+
+        function updateContent() {
+            listSubscribers({
+                type: "contenttype",
+                id: "aeeb3e780a0000c954bf54679212cf6c", // fill in
+            }).then(function (result) {
+                // console.log(result);
+                var pages = result.apiReturn.subscribers;
+                pages.forEach(function (page) {
+                    console.log(page);
+                    if (page.type == "page") {
+                        readAsset({
+                            type: "page",
+                            id: page.id,
+                        }).then(function (result) {
+                            var updatedRows = false;
+                            console.log(result);
+                            var structuredDataNodes = result.apiReturn.asset.page.structuredData.structuredDataNodes;
+                            // Note: since we have multiple structure data nodes (data definition field group)
+                            // we'll want to loop over each node to ensure we're tackling the correct one
+                            structuredDataNodes.forEach(function (node) {
+                                console.log(node); // Note: familiarize yourself with the node structure
+                                if (node.type == "group" && node.identifier == "row") { // Note: we know the node we're looking for is a group and content can only be in a "row" node
+                                    //     // Note: inside the the "row" node, positions don't change so we know:
+                                    var rowType = node.structuredDataNodes[0];
+                                    var rowBlock = node.structuredDataNodes[1];
+                                    var rowContent = node.structuredDataNodes[2];
+                                    //     // Note: we can find the college name in both content and/or block content, so we'll have to check both on each row
+                                    if (rowType.text && rowType.text.includes("Block")) { // Note: text property only exists if it has a value, so you'll want to check if it exists before checking the value
+                                        //         // console.log(node);
+                                        var rowBlockID = rowBlock.blockId;
+                                        //         // Note: since the same block can be attached to multiple pages, lets make sure we're only dealing with unique blocks
+                                        if (!blocks.includes(rowBlockID)) {
+                                            blocks.push(rowBlockID); // Note: add unique block to array for checking later                                            
+                                            //             // Note: read the block to check the block content
+                                            readAsset({
+                                                type: "block",
+                                                id: rowBlockID,
+                                            }).then(function (result) {
+                                                console.log(result);
+                                                var blockContent = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[0]; // Note: content/wysiwyg node of block
+                                                if (blockContent.text.includes(oldCollege)) { // Note: checking if content contains the old college name
+                                                    blockContent.text = blockContent.text.replaceAll(oldCollege, newCollege); // if so, lets replace it
+                                                    editAsset({
+                                                        asset: result.apiReturn,
+                                                    }).then(function (result) {
+                                                        console.log(result);
+                                                    }).catch(function (error) {
+                                                        console.log(error);
+                                                    });
+                                                    // Note: edit function updates the block
+                                                }
+                                            }).catch(function (error) {
+                                                console.log(error);
+                                            });
+                                        }
+                                    } else if (rowType.text && rowType.text == "WYSIWYG") {
+                                        if (rowContent.text.includes(oldCollege)) { // Note: checking if content contains the old college name
+                                            rowContent.text = rowContent.text.replaceAll(oldCollege, newCollege); // if so, lets replace it
+                                            updatedRows = true; // Note: setting to true since we updated a row, maybe more then 1
+                                        }
+                                    }
+                                }
+                            });
+                            if (updatedRows) { // Note: if we updated rows, lets update the page 
+                                editAsset({
+                                    asset: result.apiReturn,
+                                }).then(function (result) {
+                                    publishAsset({
+                                        type: "page",
+                                        id: page.id,
+                                        publishInformation: {
+                                            publishRelatedAssets: "true"
+                                        }
+                                    }).then(function (result) {
+                                        var updatedRows = false;
+                                        console.log(result);
+                                    }).catch(function (error) {
+                                        console.log(error);
+                                    });
+
+
+
+
+
+
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>

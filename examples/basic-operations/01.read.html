@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // Note: You can see all of the assets that you can read in the operations documentation under "ReadRequest"
+
+        /* Exercise 1: Read an asset using asset ID */
+
+        /* Step 1.1: Add a page ID from your site on line 21 */
+        /* Step 1.2: Save this file in your editor */
+        /* Step 1.3: Open this html page (01.read.html) in your default browser and view console log for web services responses */
+        // Note: For all exercises today the HTML pages will appear blank as we will be only viewing the console log
+
+        // readAsset({
+        //     type: "page",
+        //     id: "b3823d670a0000c954bf5467e35a53b5",  // fill in
+        // }).then(function (result) {
+        //     console.log(result);
+        //     // Note: result is the object the read function returns
+        //     // console.log(result.apiReturn.asset.page.metadata.title);
+        //     // Note: apiReturn is the read asset as object
+        //     // Note: Using dot notation, we drill down the object property (page XML nodes) until we reach the specific node (field) we want
+        // }).catch(function (error) {
+        //     console.log(error);
+        // });
+
+        /* Exercise 2: Read an asset using asset path */
+
+        /* Step 2.1: Comment out Exercise 1 above from lines 19-30 */
+        /* Step 2.2: Uncomment out Exercise 2 below from lines 39-47 */
+        /* Step 2.3: Add a block path and your site name on lines 41 and 42. Example block path - "blocks/program/program-2" */
+        /* Step 2.4: Save file, view console log, refresh browser */
+
+        readAsset({
+            type: "block",
+            id: "aeeb3ddd0a0000c954bf5467f247d9d4", // fill in
+
+        }).then(function (result) {
+            console.log(result);
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        // Note: There are multiple block types (FEED, INDEX, XHTML_DATADEFINITION, XML, etc) but all can be read with the type "block"
+        // in the api return, the result will specify the type of asset, including the specific block type
+    </script>
+</body>
+
+</html>

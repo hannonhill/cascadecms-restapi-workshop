@@ -1,0 +1,4 @@
+type,base asset,path,publishable?,indexable?,display name,title,author,keywords,summary,teaser,description,start date,end date,review date,exp folder path
+page,_cms/base-assets/page,pageName,true,true,Page Name,Page Name,Author,"key, words","Summary","Teaser","Description",,,,
+page,_cms/base-assets/page,parentFolder/pageName,true,true,Page Name,Page Name,Author,"key, words","Summary","Teaser","Description",,,,
+page,_cms/base-assets/page,parentFolder/subFolderName/pageName,true,true,Page Name,Page Name,Author,"key, words","Summary","Teaser","Description",,,,

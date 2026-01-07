@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // Note: To delete an asset, you have to provide the current asset's type, path/id, new asset name and folder information
+
+        /* Exercise 1: Delete asset using asset ID  */
+
+        // Note: Deleting using the asset ID will check if already deleted and found in Recycle Bin
+
+        /* Step 1.1: Add the page ID you created from the prior copy operation on line 21 */
+        /* Step 1.2: Save, open file in browser, view console log */
+
+        // deleteAsset({
+        //     type: "page",
+        //     id: "c7609af90a0000c90f2aa87d66d5d633", // fill in
+        // }).then(function (result) {
+        //     console.log(result);
+        // }).catch(function (error) {
+        //     console.log(error);
+        // });
+
+        /* Exercise 2: Delete asset using asset path */
+
+        // Note: Deleting using the asset path will check if path exists before attempting to delete
+
+        /* Step 2.1: Comment out Exercise 1 above from lines 19-26 */
+        /* Step 2.2: Uncomment out Exercise 2 below from lines 38-46 */
+        /* Step 2.3: Locate the "jan-thomas" testimonial block in the block folder and add the path on line 40 */
+        /* Step 2.4: Add your site name name on line 41 */
+        /* Step 2.5: Save, view console log, refresh browser */
+
+        // deleteAsset({
+        //     type: "block",
+        //     path: "", // fill in
+        //     siteName: "", // fill in
+        // }).then(function(result) {
+        //     console.log(result);
+        // }).catch(function(error) {
+        //     console.log(error);
+        // });
+    </script>
+</body>
+
+</html>

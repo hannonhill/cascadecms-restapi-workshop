@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // Note: To edit an asset, you should read it first, make your changes and then send the edited version of the asset back to the CMS
+
+        /* Exercise 1: Edit Video Block adding new YouTube Video ID field value */
+
+        /* Step 1.1: Locate the video block used on the index page (/blocks/video/video-1) and add asset id on line 19 */
+        /* Step 1.2: Follow instructor's demonstration of uncommenting code starting with read only then edit last */
+
+        readAsset({
+            type: "block",
+            id: "aeeb3df00a0000c954bf5467c0512543", // fill in
+        }).then(function (result) {
+            console.log(result);
+            /* Note: Result is the object the read function returns
+                apiReturn is the read asset as object
+                using dot notation, we drill down the object property (page XML nodes) until we reach the specific node (field) we want
+                since this is a data definition block and the fields we want to edit are data definition fields, we want to look at the structure data nodes */
+            var structuredData = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData;
+            /* Note: Dot notation can get long, especially since all data in an asset is made up of nested nodes
+                inside of structuredData we have data definition information and nodes where the content lives 
+                all structuredData nodes are arrays of objects, even if there's only one object at the time */
+            var video = structuredData.structuredDataNodes[0];
+            /* Note: Since all structuredData nodes are arrays, we need to target the first item of the array
+                all arrays start with an index of ZERO so the first item of the array is ZERO not ONE
+                console.log(video.identifier);
+                here, we're inside the video structure data node, you can confirm that by outputting the node identifier
+                inside the video node, there are 3 nodes, 1 for each field in the data definition 
+                each node will the following properties: type, identifier, text, etc
+                most data definition fields that take in a value will have type as text 
+                the identifier is the ID you give the field in the data definition 
+                the text is the actual value in the field, if the node doesn't have a text property, that means the field is empty/blank   */
+            var videoEyebrowText = video.structuredDataNodes[0];
+            var videoHeading = video.structuredDataNodes[1];
+            var videoYouTubeID = video.structuredDataNodes[2];
+            /* Note: Split each node into its own var for easy visualization but at this time, we only want to edit the video itself */
+            // console.log(videoYouTubeID.text);
+            /* Note: Output old videoYouTubeID */
+            videoYouTubeID.text = "z_BHv--T-4k";
+            /* Note: change video YouTubeID value */
+            /* Note: As an object property, it's value can be replaced 
+                now the whole object is updated
+                REMINDER TO SHOW "copy property path" in DEV TOOLS
+                result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[0].structuredDataNodes[2].text = "As8iVB3l6uA";
+                this could also be done without defining multiple node vars
+                the array positions [] are great for data definitions that don't have any repeatable groups/fields */
+
+            // editAsset({
+            //     asset: result.apiReturn,
+            // }).then(function (result) {
+            //     console.log(result);
+            // }).catch(function (error) {
+            //     console.log(error);
+            // });
+
+            /*  Note: using the edit function, we send back the edited object */
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

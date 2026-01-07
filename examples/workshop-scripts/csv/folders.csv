@@ -1,0 +1,4 @@
+type,base asset,path,publishable?,indexable?,display name
+folder,_cms/base-assets/folder,folderName,true,true,Folder Display Name
+folder,_cms/base-assets/folder,parentFolder/folderName,true,true,Folder Display Name
+folder,_cms/base-assets/folder,parentFolder/subFolderName/folderName,true,true,Folder Display Name
