@@ -8,7 +8,7 @@ The [original repository](https://github.com/kuklaph/cascade-cms-api) was create
 
 You can find an openAPI representation of Cascade CMS's WSDL operations here:
 
-https://nandoblanco.github.io/cuc24-cascadecms-restapi-workshop/swagger-ui/
+[https://hannonhill.github.io/cascadecms-restapi-workshop/swagger-ui/](https://hannonhill.github.io/cascadecms-restapi-workshop/swagger-ui/)
 
 All information originates from Cascade CMS's WSDL operations page. In order to access this you will need to use your organization as a subdomain followed by this url: `cascadecms.com/ws/services/AssetOperationService?wsdl`
 
