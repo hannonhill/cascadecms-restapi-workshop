@@ -16,7 +16,7 @@ Example: `yourOrg.cascadecms.com/ws/services/AssetOperationService?wsdl`
 
 ## General Usage
 
-To use the library you will need to define your Cascade CMS URL and Cascade CMS [API Key](https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey) (v8.16 and later). The `apiKey` is generated in your Cascade dashboard. The `url` is `yourOrg.cascadecms.com/api/v1/` (this is the current version as of 1/9/2023).
+To use the library you will need to define your Cascade CMS URL and Cascade CMS [API Key](https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey) (v8.16 and later). The `apiKey` is generated in your Cascade dashboard. The `url` is `yourOrg.cascadecms.com/api/v1/` (this is the current version as of 02/16/2026).
 
 ```js
 //Example
@@ -61,4 +61,4 @@ readAsset({
 	});
 ```
 
-More examples in the the example folder.
+More examples in the example folder.
