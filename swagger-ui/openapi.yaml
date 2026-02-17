@@ -9,17 +9,17 @@ info:
     name: Official Cascade Rest API Documentation
     url: "https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html"
   description: |
-    *This was originally created by [Kuklaph](https://github.com/kuklaph) and has been [forked](https://github.com/nandoblanco/cuc24-cascadecms-restapi-workshop), with permission, by Fernando Blanco. This not an official Cascade API document and I do not claim to own any rights of Hannon Hill or Cascade CMS in anyway.*
+    *This was originally created by [Kuklaph](https://github.com/kuklaph) and has been [forked](https://github.com/nandoblanco/cuc24-cascadecms-restapi-workshop), with permission, by Fernando Blanco. This is not an official Cascade API document and I do not claim to own any rights of Hannon Hill or Cascade CMS in anyway.*
 
     The WSDL was initially converted to JSDoc types (for usage in the Cascade CMS API Library) and then converted to openAPI specs.
 
-    This documentation below is to be used with the [Cascade CMS Rest API JS Library](https://github.com/nandoblanco/cuc24-cascadecms-restapi-workshop)
+    This documentation below is to be used with the [Cascade CMS Rest API JS Library](https://github.com/hannonhill/cascadecms-restapi-workshop/)
 
     - The Authentication parameter is implied with the usage of the library.
     - I have included the authentication parameter in the documentation, but it is not necessary when using the library.
     - Other authentication methods are shown for completeness.
 
-    If you come across a bug please create an [issue](https://github.com/nandoblanco/cuc24-cascadecms-restapi-workshop/issues).
+    If you come across a bug please create an [issue](https://github.com/hannonhill/cascadecms-restapi-workshop/issues).
 
     ### Snippet From Official Cascade REST Documentation
 
