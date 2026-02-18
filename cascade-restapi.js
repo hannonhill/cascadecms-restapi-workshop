@@ -1,8 +1,8 @@
 /* Step 1: Add the workshop cms URL*/
-// const cmsUrl = "https://workshops.cascadecms.com/";
+const cmsUrl = "https://services.cascadecms.com/";
 /* Step 2: Create and add your cascade API Key. */
-// Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey*/
-// const cmsAPI = "";
+// Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey */
+const cmsAPI = "";
 // Note: If you get the error "The requested asset does not exist" and you're not trying to access an existing asset, please double check your API Key.
 /* Step 3: Save */
 
