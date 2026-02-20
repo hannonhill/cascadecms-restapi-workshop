@@ -1,6 +1,6 @@
-/* Step 1: Add the workshop cms URL*/
+/* Step 1: Add the Cascade CMS URL*/
 const cmsUrl = "https://services.cascadecms.com/";
-/* Step 2: Create and add your cascade API Key. */
+/* Step 2: Create and add your Cascade API Key. */
 // Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey */
 // API Key loaded from creds.js (if available), otherwise set it here:
 if (typeof cmsAPI === 'undefined') {
@@ -13,7 +13,7 @@ const siteName = "CUC26 Web Services Essentials Workshop - Work Site"; // fill i
 
 const headers = { Authorization: "Bearer " + cmsAPI };
 
-const root = "%252F";
+const root = "%252F"; // Double-encoded forward slash ( / ) - used to read the root folder by path
 
 function readAsset(a) {
 	if (a.type == "user") {
