@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1>Exercise B1-2. List Sites</h1>
+    </div>
+
+    <script>
+        /* Exercise B1-2: Output the name of all sites you can read in Cascade  */
+
+        /* Step 1.1: Output the name of each site on line 28. Hint: The site name is equivalent to its path */
+        /* Step 1.2: Open file in browser and view console log */
+        /* Bonus Exercise: Read each site and output the response */
+
+        listSites({}).then(function (result) {
+            console.log("List Sites response:", result);
+            var sites = result.apiReturn.sites;
+            sites.forEach(function (site) { // Loop over the sites
+                
+                console.log("Site object:", site); // Hint: Look at the site object in the console log to find the property that contains the name of the site
+                // Output the name of each site
+                console.log("Site name:", ); // fill in
+
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ANSWER KEY
+
+
+    listSites({}).then(function (result) {
+        console.log("List Sites response:", result);
+        var sites = result.apiReturn.sites;
+        sites.forEach(function (site) { // Loop over the sites
+            // Output the name of each site
+            console.log("Site name:", site.path.path);
+
+            // Bonus Exercise
+            readAsset({
+                type: "site",
+                id: site.id,
+            }).then(function (result) {
+                console.log("Read response:", result);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+
+-->

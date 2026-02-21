@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1>Exercise B2-1. List Folder Children</h1>
+    </div>
+
+    <script>
+        /* Exercise B2-1: Read a folder and loop over all of its children */
+
+        /* Step 1.1: Complete the dot notation path to the children of the folder on line 30 */
+        /* Step 1.2: Add the child asset's type and id to the read operation on lines 37-38 */
+        /* Step 1.3: Save, open file in browser, view console log */
+        /* Bonus Exercise: Make it a recursive function and if the child asset type is a folder, read its children as well, so you read the entire site */
+        
+        readAsset({
+            type: "folder",
+            path: root, // Set in cascade-restapi.js
+            siteName: siteName // Set in cascade-restapi.js
+            // Note: If we didn't use "%252F" for the root folder path, the request would look like {URL}/read/folder/siteName///?{auth}
+        }).then(function (result) {
+
+            console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
+            var folderChildren = result; // fill in
+
+            folderChildren.forEach(function (child) { // Loop over the folder's children
+                
+                console.log("Child asset:", child); // Hint: Look at each child in the console log to find the properties that specify the child's type and ID, which we will need to read the child asset
+
+                readAsset({ // Read each child asset to get more information about it
+                    type: child, // fill in
+                    id: child, // fill in
+                }).then(function (result) {
+                    console.log("Read child asset response:", result);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ANSWER KEY
+
+
+    loopFolder(root, siteName); // Set in cascade-restapi.js
+    function loopFolder(path, site) {
+        readAsset({
+            type: "folder",
+            path: path,
+            siteName: site
+        }).then(function (result) {
+            // console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
+            var folderChildren = result.apiReturn.asset.folder.children;
+
+            folderChildren.forEach(function (child) { // Loop over the folder's children
+                // console.log("Child asset:", child); // Hint: Look at each child in the console log to find the properties that specify the child's type and ID, which we will need to read the child asset
+                if (child.type === "folder") {
+                    console.log("Looping folder:", child.path.path);
+                    loopFolder(child.path.path, siteName); // Recursive call to loopFolder function with the child folder's path and site name to read its children
+                } else {
+                    readAsset({ // Read each child asset to get more information about it
+                        type: child.type,
+                        id: child.id,
+                    }).then(function (result) {
+                        console.log("Read child asset response:", result);
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
+
+-->

@@ -1,15 +1,17 @@
 /* Step 1: Add the Cascade CMS URL*/
 const cmsUrl = "https://services.cascadecms.com/";
+
 /* Step 2: Create and add your Cascade API Key. */
-// Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey */
-// API Key loaded from creds.js (if available), otherwise set it here:
-if (typeof cmsAPI === 'undefined') {
+// Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey */
+if (typeof cmsAPI === 'undefined') { // API Key loaded from creds.js (if available), otherwise set it here:
     cmsAPI = "YOUR API KEY HERE"; // fill in your API key if not using creds.js
 }
 // Note: If you get the error "The requested asset does not exist" and you're trying to access an existing asset, please double check your API Key.
+
 /* Step 3: Update to YOUR site name */
 const siteName = "CUC26 Web Services Essentials Workshop - Work Site"; // fill in
-/* Step 4: Save */
+
+/* Step 4: Save! */
 
 const headers = { Authorization: "Bearer " + cmsAPI };
 
