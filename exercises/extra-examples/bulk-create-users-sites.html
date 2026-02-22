@@ -2,18 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
 </head>
 
 <body>
     <script>
-        const cmsUrl = "https://workshops.cascadecms.com/";
-        const cmsAPI = "";
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
-    <script src="../../cascade-restapi.js"></script>
-    <script>
-
-        /* Note: Bonus script - This script automates the creation of Cascade users by reading in list from CSV file (users.csv),
+        /* Note: Bonus script - This script automates the creation of Cascade users by reading in list from CSV file (/csv/users.csv),
           creating individual sites and updating site access for each user.  */
 
         // createUsers();
@@ -23,7 +19,7 @@
         // updateSiteAccess();
 
         function createUsers() {
-            Papa.parse('csv/users2.csv', {
+            Papa.parse('csv/users.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -60,7 +56,7 @@
         }
 
         function createSites() {
-            Papa.parse('csv/users2.csv', {
+            Papa.parse('csv/users.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -85,7 +81,7 @@
         }
 
         function updateSiteAccess() {
-            Papa.parse('csv/users2.csv', {
+            Papa.parse('csv/users.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,

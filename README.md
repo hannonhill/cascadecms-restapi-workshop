@@ -61,4 +61,4 @@ readAsset({
 	});
 ```
 
-More examples in the example folder.
+More examples in the exercises folder.

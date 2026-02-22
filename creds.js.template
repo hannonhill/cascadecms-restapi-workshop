@@ -1,0 +1,2 @@
+// Copy/rename this file to creds.js and fill in your API Key
+const cmsAPI = "YOUR_API_KEY_HERE";

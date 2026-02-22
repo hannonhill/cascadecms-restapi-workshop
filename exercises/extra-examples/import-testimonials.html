@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <script>
+        /* Exercise 1: Automate creating multiple simple testimonial blocks by reading from csv file (/csv/testimonials.csv) */
+
+        /* Step 1.1: Locate the testimonial block base asset (/_cms/base-assets/blocks/testimonial) and add the asset ID on line 18 */
+        /* Step 1.2: Add the testimonial block folder path (in the block folder) which will be where our new blocks will be created on line 19 */
+        /* Step 1.3: Add the testimonial block site name on line 20 */
+        /* Step 1.4: Follow instructor's demonstration as the script is reviewed */
+
+        var baseAssetID = "aeeb3ddd0a0000c954bf5467f247d9d4"; // fill in
+        var testimonialsFolderPath = "blocks/testimonial"; // fill in
+        var testimonialsSiteName = "_WS-Master"; // fill in
+
+        Papa.parse('csv/testimonials.csv', {
+            header: true,
+            download: true,
+            skipEmptyLines: true,
+            transformHeader: function (h) {
+                return h.replace(/[\W_]+/g, "").trim();
+            },
+            complete: function (result) {
+                console.log(result);
+                // importTestimonials(result.data);
+            }
+        });
+
+        function importTestimonials(data) {
+            console.log(data);
+            data.forEach(function (t) {
+                // Note: loop over the testimonials
+
+                // console.log(t);
+                // Note: output each testimonial as an object
+
+                // console.log(t.quote);
+                // console.log(t.quotee);
+                // console.log(t.year);
+                // Note: output each testimonial individual property/value
+
+                var newBlockName = t.quotee.toLowerCase().replaceAll(/[^a-z0-9-]/gi, "-").trim();
+                // Note: format the testimonial quotee to the correct format needed for the block name
+
+                // console.log(newBlockName);
+                // Note: output newBlockName to verify its correct
+
+                // Note: copy block using asset path and folder path defined above
+                // #1 first we copy
+                copyAsset({
+                    type: "block",
+                    id: baseAssetID,
+                    copyParameters: {
+                        newName: newBlockName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: testimonialsFolderPath,
+                                siteName: testimonialsSiteName,
+                            }
+                        }
+                    }
+                }).then(function (result) {
+                    console.log(result);
+                    // #2 then we read
+                    readAsset({
+                        type: "block",
+                        path: testimonialsFolderPath + "/" + newBlockName,
+                        siteName: testimonialsSiteName,
+                        // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                    }).then(function (result) {
+                        console.log(result);
+                        var testimonial = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[0].structuredDataNodes;
+                        testimonial[0].text = t.quote; // quote
+                        testimonial[1].text = t.quotee; // quotee
+                        testimonial[2].text = t.year; // year
+                        // Note: update the testimonial fields
+                        editAsset({
+                            asset: result.apiReturn,
+                        }).then(function (result) {
+                            console.log(result);
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                        // Note: using the edit function, we send back the edited object
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                // console.log("----");
+                // Note: a separator to make the log easy to read
+            });
+        }
+
+
+
+    </script>
+</body>
+
+</html>

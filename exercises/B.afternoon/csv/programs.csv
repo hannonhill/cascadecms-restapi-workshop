@@ -1,48 +1,48 @@
-system-name,title,summary,degree,location,completionTime,img,alt
-program-04,Napology 101,Master the art of napping for academic success,Certificate,Main Campus,2 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-05,Yoga for Computer Science Majors,Find inner peace while debugging your code,Certificate,Online,4 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-06,Pizza Tasting Certification,Become a certified pizza connoisseur,Certificate,Off Campus,2 years,/blocks/program/images/cs-img3.jpg,students working together in dorm chairs.
-program-07,Intro to Conspiracy Theories,Explore the weirdest and wildest theories,Associate,Online,4 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-08,Creative Excuse Writing Workshop,Craft perfect excuses for missed deadlines,Certificate,Main Campus,2 years,/blocks/program/images/cs-img5.jpg,student presents report in front of student class.
-program-09,Binge-Watching 101,Hone binge-watching skills for academic success,Certificate,Online,2 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-10,How to Survive a Zombie Apocalypse,Essential skills for the unlikely undead scenario,Bachelor's,Off Campus,4 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-11,Theater of Awkward Situations,Embrace awkwardness with style and confidence,Associate,Main Campus,4 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-12,Underwater Basket Weaving Extravaganza,Dive into the world of aquatic handicrafts,Associate,Off Campus,2 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-13,Extreme Note-Taking Techniques,Elevate note-taking to extreme levels of efficiency,Certificate,Online,4 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-14,Intro to Procrastination Studies,Delve into the art and science of procrastination,Certificate,Main Campus,2 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-15,How to Win Arguments on the Internet,Develop unbeatable online debating skills,Certificate,Online,4 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-16,Computer Science,Develop coding skills for tech careers.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img3.jpg,students working together in dorm chairs.
-program-17,Nursing,Learn patient care and medical skills.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-18,Finance,Master business finance strategies.,Graduate,Online,2 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-19,Graphic Design,Explore visual communication.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-20,Criminal Justice,Study law enforcement and legal systems.,Bachelor's,Off Campus,4 years,/blocks/program/images/cs-img3.jpg,students working together in dorm chairs.
-program-21,Elementary Education,Prepare for a career in teaching.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-22,Psychology,Understand human behavior and mental processes.,Bachelor's,Online,4 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-23,Electrical Engineering,Design and develop electrical systems.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img5.jpg,student presents report in front of student class.
-program-24,Environmental Science,Explore the impact of human activity on the environment.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-25,Master of Social Work,Advanced training for social work professionals.,Graduate,Main Campus,2 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-26,Culinary Arts,Learn culinary techniques and restaurant management.,Associate,Main Campus,2 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-27,Marketing,Master marketing strategies and consumer behavior.,Bachelor's,Online,4 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-28,Civil Engineering,Design and maintain infrastructure projects.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-29,Public Health,Promote community health and wellness.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-30,Music Education,Prepare for a career in music education.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-31,Master of Public Administration,Develop leadership skills in public service.,Graduate,Online,2 years,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-32,Cybersecurity,Specialize in securing digital information.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-33,Exercise Science,Study human movement and health.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img5.jpg,student presents report in front of student class.
-program-34,Business Analytics,Analyze and interpret data for business decisions.,Master's,Online,2 years,/blocks/program/images/cs-img6.jpg,students working together on steps looking at a computer screen
-program-35,Business Basics,Explore fundamental business concepts and strategies.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img5.jpg,student friends pose together in between classes.
-program-36,Environmental Science Explorations,Study the impact of human activities on the environment.,Bachelor's,Off Campus,4 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-37,Data Analytics Certification,Gain skills in data analysis and visualization techniques.,Graduate,Online,2 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-38,Culinary Arts Mastery,Develop advanced culinary techniques and creativity.,Associate,Main Campus,2 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-39,Urban Planning Strategies,Examine urban development and design sustainable solutions.,Graduate,Main Campus,2 years,/blocks/program/images/cs-img5.jpg,student presents report in front of student class.
-program-40,Graphic Design Bootcamp,Intensive program covering graphic design principles.,Certificate,Online,1 year,/blocks/program/images/cs-img2.jpg,student studying on computer in campus mess hall
-program-41,Computer Science Innovations,Dive into cutting-edge advancements in computer science.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-42,Early Childhood Education,Learn effective teaching strategies for young learners.,Associate,Off Campus,2 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-43,Sustainable Energy Solutions,Explore renewable energy sources and sustainable practices.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img5.jpg,student presents report in front of student class.
-program-44,International Business Diplomacy,Navigate the complexities of global business environments.,Graduate,Online,2 years,/blocks/program/images/cs-img3.jpg,students working together in dorm chairs.
-program-45,Fashion Design Fundamentals,Master the basics of fashion design and garment creation.,Associate,Main Campus,2 years,/blocks/program/images/cs-img6.jpg,student friends pose together in between classes.
-program-46,Healthcare Administration,Develop managerial skills specific to the healthcare field.,Bachelor's,Off Campus,4 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-47,Artificial Intelligence Mastery,Delve into the world of artificial intelligence and machine learning.,Graduate,Online,2 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-48,Political Science Explorations,Analyze political systems policies and global relations.,Bachelor's,Main Campus,4 years,/blocks/program/images/cs-img4.jpg,students looking at tv presentation in class.
-program-49,Creative Writing Workshop,Hone your writing skills through workshops and critiques.,Graduate,Online,2 years,/blocks/program/images/cs-img1.jpg,students working together on steps looking at a computer screen
-program-50,Criminal Justice Investigations,Explore investigative techniques and criminal law procedures.,Bachelor's,Off Campus,4 years,/blocks/program/images/cs-img3.jpg,students working together in dorm chairs.
+program name,description,degree,department,img,alt
+Napology 101,Master the art of napping for academic success,Certificate; Associate's,College of Health Sciences,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Yoga for Computer Science Majors,Find inner peace while debugging your code,Certificate; Bachelor's,College of Computer Science,/_files/img/program/2.png,student studying on computer in campus mess hall
+Pizza Tasting Certification,Become a certified pizza connoisseur,Certificate; Associate's,School of Culinary Arts,/_files/img/program/3.png,students working together in dorm chairs.
+Intro to Conspiracy Theories,Explore the weirdest and wildest theories,Associate's; Bachelor's,College of Liberal Arts,/_files/img/program/4.png,students looking at tv presentation in class.
+Creative Excuse Writing Workshop,Craft perfect excuses for missed deadlines,Certificate,School of Communications,/_files/img/program/5.png,student presents report in front of student class.
+Binge-Watching 101,Hone binge-watching skills for academic success,Certificate,School of Media Studies,/_files/img/program/1.png,students working together on steps looking at a computer screen
+How to Survive a Zombie Apocalypse,Essential skills for the unlikely undead scenario,Bachelor's; Master's,College of Emergency Management,/_files/img/program/2.png,student studying on computer in campus mess hall
+Theater of Awkward Situations,Embrace awkwardness with style and confidence,Associate's; Bachelor's,School of Fine Arts,/_files/img/program/4.png,students looking at tv presentation in class.
+Underwater Basket Weaving Extravaganza,Dive into the world of aquatic handicrafts,Associate,College of Arts & Crafts,/_files/img/program/3.png,student friends pose together in between classes.
+Extreme Note-Taking Techniques,Elevate note-taking to extreme levels of efficiency,Certificate,School of Education,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Intro to Procrastination Studies,Delve into the art and science of procrastination,Certificate,College of Social Sciences,/_files/img/program/2.png,student studying on computer in campus mess hall
+How to Win Arguments on the Internet,Develop unbeatable online debating skills,Certificate; Bachelor's; Master's,School of Communications,/_files/img/program/4.png,student friends pose together in between classes.
+Computer Science,Develop coding skills for tech careers.,Bachelor's; Master's; Ph.D.,College of Computer Science,/_files/img/program/3.png,students working together in dorm chairs.
+Nursing,Learn patient care and medical skills.,Bachelor's; Master's,School of Nursing,/_files/img/program/5.png,student friends pose together in between classes.
+Finance,Master business finance strategies.,Bachelor's; Master's,School of Business,/_files/img/program/2.png,student studying on computer in campus mess hall
+Graphic Design,Explore visual communication.,Certificate; Associate's; Bachelor's,School of Fine Arts,/_files/img/program/4.png,students looking at tv presentation in class.
+Criminal Justice,Study law enforcement and legal systems.,Associate's; Bachelor's; Master's,College of Criminal Justice,/_files/img/program/3.png,students working together in dorm chairs.
+Elementary Education,Prepare for a career in teaching.,Bachelor's,School of Education,/_files/img/program/1.png,student friends pose together in between classes.
+Psychology,Understand human behavior and mental processes.,Bachelor's; Master's; Ph.D.,College of Social Sciences,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Electrical Engineering,Design and develop electrical systems.,Bachelor's; Master's,College of Engineering,/_files/img/program/5.png,student presents report in front of student class.
+Environmental Science,Explore the impact of human activity on the environment.,Bachelor's; Master's,College of Natural Sciences,/_files/img/program/2.png,student studying on computer in campus mess hall
+Master of Social Work,Advanced training for social work professionals.,Master's; Ph.D.,College of Social Sciences,/_files/img/program/4.png,students looking at tv presentation in class.
+Culinary Arts,Learn culinary techniques and restaurant management.,Certificate; Associate's,School of Culinary Arts,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Marketing,Master marketing strategies and consumer behavior.,Bachelor's; Master's,School of Business,/_files/img/program/2.png,student studying on computer in campus mess hall
+Civil Engineering,Design and maintain infrastructure projects.,Bachelor's; Master's; Ph.D.,College of Engineering,/_files/img/program/3.png,student friends pose together in between classes.
+Public Health,Promote community health and wellness.,Bachelor's; Master's,College of Health Sciences,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Music Education,Prepare for a career in music education.,Bachelor's; Master's,School of Fine Arts,/_files/img/program/4.png,students looking at tv presentation in class.
+Master of Public Administration,Develop leadership skills in public service.,Master's; Ph.D.,School of Public Affairs,/_files/img/program/2.png,student studying on computer in campus mess hall
+Cybersecurity,Specialize in securing digital information.,Bachelor's; Master's; Ph.D.,College of Computer Science,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Exercise Science,Study human movement and health.,Bachelor's; Master's,College of Health Sciences,/_files/img/program/5.png,student presents report in front of student class.
+Business Analytics,Analyze and interpret data for business decisions.,Master's,School of Business,/_files/img/program/2.png,students working together on steps looking at a computer screen
+Business Basics,Explore fundamental business concepts and strategies.,Associate's; Bachelor's,School of Business,/_files/img/program/5.png,student friends pose together in between classes.
+Environmental Science Explorations,Study the impact of human activities on the environment.,Bachelor's; Master's; Ph.D.,College of Natural Sciences,/_files/img/program/4.png,student friends pose together in between classes.
+Data Analytics Certification,Gain skills in data analysis and visualization techniques.,Master's; Ph.D.,School of Mathematics,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Culinary Arts Mastery,Develop advanced culinary techniques and creativity.,Associate's; Bachelor's,School of Culinary Arts,/_files/img/program/3.png,student friends pose together in between classes.
+Urban Planning Strategies,Examine urban development and design sustainable solutions.,Master's; Ph.D.,School of Architecture,/_files/img/program/5.png,student presents report in front of student class.
+Graphic Design Bootcamp,Intensive program covering graphic design principles.,Certificate,School of Fine Arts,/_files/img/program/2.png,student studying on computer in campus mess hall
+Computer Science Innovations,Dive into cutting-edge advancements in computer science.,Bachelor's; Master's,College of Computer Science,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Early Childhood Education,Learn effective teaching strategies for young learners.,Associate's; Bachelor's,School of Education,/_files/img/program/4.png,students looking at tv presentation in class.
+Sustainable Energy Solutions,Explore renewable energy sources and sustainable practices.,Bachelor's; Master's,College of Engineering,/_files/img/program/5.png,student presents report in front of student class.
+International Business Diplomacy,Navigate the complexities of global business environments.,Master's; Ph.D.,School of Business,/_files/img/program/3.png,students working together in dorm chairs.
+Fashion Design Fundamentals,Master the basics of fashion design and garment creation.,Certificate; Associate's,School of Fine Arts,/_files/img/program/5.png,student friends pose together in between classes.
+Healthcare Administration,Develop managerial skills specific to the healthcare field.,Bachelor's; Master's,College of Health Sciences,/_files/img/program/4.png,students looking at tv presentation in class.
+Artificial Intelligence Mastery,Delve into the world of artificial intelligence and machine learning.,Master's; Ph.D.,College of Computer Science,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Political Science Explorations,Analyze political systems policies and global relations.,Bachelor's; Master's; Ph.D.,College of Liberal Arts,/_files/img/program/4.png,students looking at tv presentation in class.
+Creative Writing Workshop,Hone your writing skills through workshops and critiques.,Master's; Ph.D.,College of Liberal Arts,/_files/img/program/1.png,students working together on steps looking at a computer screen
+Criminal Justice Investigations,Explore investigative techniques and criminal law procedures.,Associate's; Bachelor's,College of Criminal Justice,/_files/img/program/3.png,students working together in dorm chairs.

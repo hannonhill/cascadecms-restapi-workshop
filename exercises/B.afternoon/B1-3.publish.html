@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1>Exercise B1-3. Publish / Unpublish</h1>
+    </div>
+
+    <script>
+        /* Exercise B1-3: Publish / Unpublish an asset using asset ID  */
+
+        /* Step 1.1: Add the ID and type of a publishable asset on lines 24-25 */
+        /* Step 1.2: Save, open file in browser, view console log */
+        /* Step 1.3: Check out your published page! (More > Live from Cascade) */
+        /* Step 1.4: Change publishInformation to unpublish, repeat steps 1.2 and 1.3 to see the asset unpublished */
+        /* Bonus Exercise: Add a destination parameter to publishInformation using the Workshops destination in the same site as the asset you are publishing */
+
+        publishAsset({
+            type: "", // fill in
+            id: "", // fill in
+            publishInformation: {
+                unpublish: false // Enable to unpublish the asset
+            }
+        }).then(function (result) {
+            console.log("Publish response:", result);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ANSWER KEY
+
+
+        publishAsset({
+            type: "page", // fill in
+            id: "68e16244c0a8002f77f581826b6ab573", // fill in
+            publishInformation: {
+                unpublish: false, // Enable if you want to unpublish the asset instead of publish
+                destinations: [
+                    {
+                        path: {
+                            path: "Workshops",
+                            siteName: siteName
+                        },
+                        type: "destination"
+                    }
+                ]
+            }
+        }).then(function (result) {
+            console.log("Publish response:", result);
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+
+-->
