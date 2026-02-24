@@ -1,5 +1,5 @@
 /* Step 1: Add the Cascade CMS URL*/
-const cmsUrl = "https://services.cascadecms.com/";
+const cmsUrl = "https://workshops.cascadecms.com/";
 
 /* Step 2: Create and add your Cascade API Key. */
 // Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey */
