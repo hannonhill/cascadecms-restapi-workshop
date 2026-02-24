@@ -54,11 +54,29 @@
                 this could also be done without defining multiple node vars
                 the array positions [] are great for data definitions that don't have any repeatable groups/fields */
 
-            /* Exercise 
+            /* Exercise A
                 Now its your turn to make some edits. Please update the color and label. 
                 *Hint* you will want to use the vars defined above and set them to a new value
             */
             // Your code here
+
+            
+            /* Exercise B
+                As stated above, the bracket notation is great for getting values of fields that done repeat
+                But we are dealing with a component that has repeatable groups
+                So below is actually a better way of updating fields since array positions and field order can change
+                
+                Change all buttons so that they are the same color. *Hint* you will want to replace the console.log with an assignment like above
+            */
+            // var buttonGroups = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes;
+            // buttonGroups.forEach(group => {
+            //     var sdNodes = group.structuredDataNodes;
+            //     sdNodes.forEach(node => {
+            //         node.identifier == "color"
+            //         ?  console.log(node.text) // replace me
+            //         : null
+            //     });
+            // });
 
             // editAsset({
             //     asset: result.apiReturn,
