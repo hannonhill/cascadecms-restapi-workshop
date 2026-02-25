@@ -12,8 +12,8 @@
     <script>
         /* Exercise B2-1: Read a folder and loop over all of its children */
 
-        /* Step 1: Complete the dot notation path to the children of the folder (line 30) */
-        /* Step 2: Add the child asset's type and id to the read operation (lines 37-38) */
+        /* Step 1: Complete the dot notation path to the children of the folder (line 28) */
+        /* Step 2: Add the child asset's type and id to the read operation (lines 35-36) */
         /* Step 3: Save, open file in browser, view console log */
         /* Bonus Exercise: Make it a recursive function and if the child asset type is a folder, read its children as well, so you read the entire site */
         
@@ -21,7 +21,7 @@
             type: "folder",
             path: root, // Set in cascade-restapi.js
             siteName: siteName // Set in cascade-restapi.js
-            // Note: If we didn't use "%252F" for the root folder path, the request would be {URL}/read/folder/siteName// which looks malformed
+            // Note: If we didn't use "%252F" for the root folder path, the request would be "{URL}/read/folder/siteName//" which looks malformed
         }).then(function (result) {
 
             console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array

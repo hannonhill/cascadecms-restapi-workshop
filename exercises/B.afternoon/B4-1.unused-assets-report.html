@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <title>Exercise B4-1: Unused Assets Report</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1>Exercise B4-1: Unused Assets Report</h1>
+        <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
+        <h2 style="display:inline">Sites. </h2><span>Select the site(s) you'd like to scan.</span><br/><br />
+        <select name="sites" id="sites" multiple="" style="resize: both; width: 90%; height: 100px;"></select><br /><br />
+        <button onclick="scanSites()">Scan Sites</button>
+        <!-- Log some stuff here -->
+        <hr style="margin: 30px 0;" />
+        <h2>Results</h2>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        /* Exercise B4-1: Loop over all content in a site and check for assets without any relationships */
+
+        /* Step 1: Complete the dot notation path to the children of the folder (line 28) */
+        /* Step 2: Add the child asset's type and id to the read operation (lines 35-36) */
+        /* Step 3: Save, open file in browser, view console log */
+        /* Bonus Exercise: Make it a recursive function and if the child asset type is a folder, read its children as well, so you read the entire site */
+        
+        var sitesSelect = document.getElementById("sites");
+        var results = document.getElementById("messages");
+
+        listSites({}).then(function (result) {
+            console.log("List Sites response:", result);
+            var sites = result.apiReturn.sites;
+            sites.forEach(function (site) { // Loop over the sites
+                var option = document.createElement("option");
+                option.text = site.path.path;
+                option.value = site.path.path;
+                sitesSelect.add(option);
+            });
+            results.innerHTML += "<p>✓ Sites loaded!</p>";
+        }).catch(function (error) {
+            console.log("List sites error:", error);
+        });
+
+        async function scanSites () {
+            const selectedSites = getSelectedSites();
+            if (selectedSites.length) {
+                results.innerHTML += "<p>Scanning the following sites: " + selectedSites + "</p>";
+
+                for (const siteName of selectedSites) {
+                    results.innerHTML += "<br/><p><strong>Scanning " + siteName + "</strong></p>";
+                    await loopFolder(root, siteName);
+                    results.innerHTML += "<p><strong>✓ Done scanning " + siteName + "</strong></p>";
+                }
+            }
+        }
+
+        function getSelectedSites() {
+            var selectedSites = [];
+            for (var i = 0; i < sitesSelect.options.length; i++) {
+                if (sitesSelect.options[i].selected) {
+                    selectedSites.push(sitesSelect.options[i].value);
+                }
+            }
+            if (selectedSites.length == 0) {
+                results.innerHTML += "<p>x No sites selected!!!</p>";
+            }
+            return selectedSites;
+        }
+
+        function loopFolder(path, site) {
+            return readAsset({
+                type: "folder",
+                path: path,
+                siteName: site
+            }).then(function (result) {
+                var folderChildren = result.apiReturn.asset.folder.children;
+                // Collect all promises for children
+                var childPromises = folderChildren.map(function (child) {
+                    if (child.type === "folder") {
+                        console.log("Looping folder:", child.path.path);
+                        // Return the recursive promise
+                        return loopFolder(child.path.path, site);
+                    } else {
+                        // Return the promise for listSubscribers
+                        return listSubscribers({
+                            id: child.id,
+                            type: child.type,
+                        }).then(function (result) {
+                            console.log("List Subscribers response:", result);
+
+                            if (result.apiReturn.subscribers.length == 0 && result.apiReturn.manualSubscribers.length == 0) {
+                                results.innerHTML += "<p>0 subscribers for " + child.path.path + "</p>";
+                            }
+
+                        }).catch(function (error) {
+                            console.log("List subscribers error:", error);
+                        });
+                    }
+                });
+                // Wait for all children to finish
+                return Promise.all(childPromises);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ANSWER KEY
+
+
+
+
+
+-->
