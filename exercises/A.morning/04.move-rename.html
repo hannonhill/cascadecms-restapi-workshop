@@ -2,26 +2,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
+    <title>Exercise 4</title>
+    <link rel="stylesheet" href="../../styles.css" />
 </head>
 
 <body>
+    <script src="../../creds.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
         // Note: To move an asset, you have to provide the current asset's type, path/id and new folder information
 
-        /* Exercise 1: Move asset using asset and folder ID */
+        /* Exercise 1: Oh no, we have a block in the wrong folder! Please move it to the correct one 
+            The chemistry program block (/_blocks/buttons/chemistry) should be in the programs folder (/_blocks/programs)
+        */
 
-        /* Step 1.1: Add a page ID to move from your site on line 23 */
-        /* Step 1.2: Add a destination folder ID from your site for where your page should be moved to on line 23 */
+        /* Step 1.1: Add the asset type on line 26 and the asset ID on line 27 */
+        /* Step 1.2: Add a destination folder ID from your site for where your page should be moved to on line 30 
+                        Add the asset type of the **folder** on line 31 as well
+        */
         /* Step 1.3: Save, open file in browser, view console log */
 
         // moveAsset({
-        //     type: "page",
-        //     id: "c7609af90a0000c90f2aa87d66d5d633", // fill in
+        //     type: "", // fill in
+        //     id: "", // fill in
         //     moveParameters: {
         //         destinationContainerIdentifier: {
-        //             id: "aeeb49950a0000c954bf5467cff7a353", // fill in
-        //             type: "folder",
+        //             id: "", // fill in
+        //             type: "", // fill in
         //         }
         //     }
         // }).then(function (result) {
@@ -31,25 +38,27 @@
         //     // Note: if you see the error "The selected folder could not be found." make sure the folder id/path is correct
         // });
 
-        /* Exercise 2: Move asset using path and rename asset */
+        /* Exercise 2: Drats! We have another block that is not only in the wrong folder, but doesn't follow our file naming convention! 
+                        Our naming convention is all lowercase with underscores acting as spaces
+        */
 
         // Note: The move operation is also used for renaming assets
 
-        /* Step 2.1: Comment out Exercise 1 above from lines 18-32 */
-        /* Step 2.2: Uncomment out Exercise 2 below from lines 45-61 */
-        /* Step 2.3: Add a block path to move and your site name on line 47 Ex. blocks/testimonial/jan-thomas */
-        /* Step 2.4: Add a destination folder path and your site name for where your block should be moved to on line 51 */
-        /* Step 2.5: Add a new system name to rename your block on line 54 */
+        /* Step 2.1: Comment out Exercise 1 above from lines 25-39 */
+        /* Step 2.2: Uncomment out Exercise 2 below from lines 54-70 */
+        /* Step 2.3: Add a block type, path, and site name on lines 55-57 */
+        /* Step 2.4: Add a destination folder ID and type on lines 60-61*/
+        /* Step 2.5: Add a new system name to rename your block on line 63 using our naming convention */
         /* Step 2.6: Save, view console log, refresh browser */
 
         // moveAsset({
-        //     type: "block",
+        //     type: "", // fill in
         //     path: "", // fill in
         //     siteName: "", // fill in
         //     moveParameters: {
         //         destinationContainerIdentifier: {
         //             id: "", // fill in
-        //             type: "folder",
+        //             type: "", // fill in
         //         },
         //         newName: "", // fill in
         //     }
@@ -60,6 +69,8 @@
 
         // });
     </script>
+    <h1>Exercise 4: Move/Rename an asset</h1>
+    <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
 </body>
 
 </html>
