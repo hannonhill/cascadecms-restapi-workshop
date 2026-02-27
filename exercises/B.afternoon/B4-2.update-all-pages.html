@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <title>Exercise B4-2: Update All Pages</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <div>
+        <h1>Exercise B4-2: Update All Pages</h1>
+        <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
+        <button onclick="updatePages()">Update Pages</button>
+        <!-- Log some stuff here -->
+        <h2>Results</h2>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        /* Exercise B4-2: Loop over all content in a site and attach a block */
+
+        /* Step 1: Fill in the ID to your cta-buttons block found in /_blocks/buttons (line ) */
+        /* Step 2: Check the content type of the page, and only edit if it is a Landing Page (line ) */
+        /* Step 3: Add the CTA block to the last row of the page (line ) */
+        /* Step 4: Save, open file in browser, and update pages! Check the console for any errors */
+        /* Bonus Exercise:  Check if the last row already has the CTA block attached and skip the edit if so. 
+                            This helps make the script reusable without duplicating content. */
+
+        var results = document.getElementById("messages");
+        var CTABlockID = "8c363cd20a0000d54fbffbc6c7393eb5"; // Step 1: fill in
+
+        async function updatePages() {
+            results.innerHTML += "<p><strong>Updating pages in " + siteName + "</strong></p>";
+            await loopFolder(root, siteName); // What happens if we don't await here?
+            results.innerHTML += "<p><strong>✓ Done updating in " + siteName + "</strong></p>";
+        }
+
+        function loopFolder(path, site) {
+            return readAsset({
+                type: "folder",
+                path: path,
+                siteName: site
+            }).then(function (result) {
+                var folderChildren = result.apiReturn.asset.folder.children;
+                // Collect all promises for children
+                var childPromises = folderChildren.map(function (child) {
+                    if (child.type === "folder") {
+                        console.log("Looping folder:", child.path.path);
+                        // Return the recursive promise
+                        return loopFolder(child.path.path, site);
+                    } else if (child.type === "page") { // Only read pages
+                        return readAsset({
+                            id: child.id,
+                            type: "page",
+                        }).then(function (result) {
+                            // console.log("Read response:", result);
+
+                            // if (result.apiReturn.asset.page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") { // Step 2: fill in
+                            if (result.apiReturn.asset.page.name == "landing-master") { // debug limiter to a specific page
+                                // Make the modifications to the page
+
+                                // Step 3: fill in
+                                // Hint: Look at the first row on the landing master page
+                                // console.log(result.apiReturn.asset.page.structuredData.structuredDataNodes[1]);
+                                var newRow = {
+                                    "type"                  : "group",
+                                    "identifier"            : "row",
+                                    "structuredDataNodes"   : [
+                                        {
+                                            "type"          : "text",
+                                            "identifier"    : "type",
+                                            "text"          : "buttons"
+                                        },
+                                        {
+                                            "type"          : "text",
+                                            "identifier"    : "dataSource",
+                                            "text"          : "block" // fill in
+                                        },
+                                        {
+                                            "type"          : "asset",
+                                            "identifier"    : "block",
+                                            "assetType"     : "block", // fill in
+                                            "blockId"       : CTABlockID // fill in
+                                        }
+                                    ]
+                                };
+                                result.apiReturn.asset.page.structuredData.structuredDataNodes.push(newRow);
+
+                                // The modified asset is submitted to Cascade with an edit
+                                return editAsset({
+                                    asset: result.apiReturn,
+                                }).then(function (result) {
+                                    console.log("Edit response:", result);
+                                    results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
+                                }).catch(function (error) {
+                                    console.log("Edit error:", error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log("Read error:", error);
+                        });
+                    }
+                });
+                // Wait for all children to finish
+                return Promise.all(childPromises);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ANSWER KEY
+
+
+
+
+
+-->

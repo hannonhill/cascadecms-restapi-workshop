@@ -12,8 +12,11 @@
     <div>
         <h1>Exercise B4-1: Unused Assets Report</h1>
         <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
-        <button onclick="scanSite()">Scan Site</button>
+        <h2 style="display:inline">Sites. </h2><span>Select the site(s) you'd like to scan.</span><br /><br />
+        <select name="sites" id="sites" multiple="" style="resize: both; width: 90%; height: 100px;"></select><br /><br />
+        <button onclick="scanSites()">Scan Sites</button>
         <!-- Log some stuff here -->
+        <hr style="margin: 30px 0;" />
         <h2>Results</h2>
         <div id="messages"></div>
     </div>
@@ -21,16 +24,52 @@
     <script>
         /* Exercise B4-1: Loop over all content in a site and get the number of relationships for each asset */
 
-        /* Step 1: Add up the subscribers and the manual subscribers for each asset (line 57) */
-        /* Step 2: Save, open file in browser, and scan site! Check the console for any errors */
+        /* Step 1: Output the site name for the <select> option (lines 40-41) */
+        /* Step 2: Add up the subscribers and the manual subscribers for each asset (line 96) */
+        /* Step 3: Save, open file in browser, select your sites and scan */
         /* Bonus Exercise: Highlight the lines that have 0 relationships */
 
+        var sitesSelect = document.getElementById("sites");
         var results = document.getElementById("messages");
 
-        async function scanSite() {
-            results.innerHTML += "<p><strong>Scanning " + siteName + "</strong></p>";
-            await loopFolder(root, siteName); // What happens if we don't await here?
-            results.innerHTML += "<p><strong>✓ Done scanning " + siteName + "</strong></p>";
+        listSites({}).then(function (result) {
+            console.log("List Sites response:", result);
+            var sites = result.apiReturn.sites;
+            sites.forEach(function (site) { // Loop over the sites
+                var option = document.createElement("option");
+                option.text = ""; // Step 1: fill in
+                option.value = ""; // Step 1: fill in
+                sitesSelect.add(option);
+            });
+            results.innerHTML += "<p>✓ " + sitesSelect.options.length + " site(s) loaded!</p>";
+        }).catch(function (error) {
+            console.log("List sites error:", error);
+        });
+
+        async function scanSites() {
+            const selectedSites = getSelectedSites();
+            if (selectedSites.length) {
+                results.innerHTML += "<p>Scanning the following sites: " + selectedSites + "</p>";
+
+                for (const siteName of selectedSites) {
+                    results.innerHTML += "<br/><p><strong>Scanning " + siteName + "</strong></p>";
+                    await loopFolder(root, siteName);
+                    results.innerHTML += "<p><strong>✓ Done scanning " + siteName + "</strong></p>";
+                }
+            }
+        }
+
+        function getSelectedSites() {
+            var selectedSites = [];
+            for (var i = 0; i < sitesSelect.options.length; i++) {
+                if (sitesSelect.options[i].selected) {
+                    selectedSites.push(sitesSelect.options[i].value);
+                }
+            }
+            if (selectedSites.length == 0) {
+                results.innerHTML += "<p>x No sites selected!!!</p>";
+            }
+            return selectedSites;
         }
 
         function loopFolder(path, site) {
@@ -54,8 +93,8 @@
                         }).then(function (result) {
                             console.log("List Subscribers response:", result);
 
-                            var numberOfSubscribers = ""; // Step 1: fill in
-
+                            var numberOfSubscribers = ""; // Step 2: fill in
+                            
                             results.innerHTML += "<p>" + numberOfSubscribers + " subscribers for " + child.path.path + "</p>";
 
                         }).catch(function (error) {
@@ -124,6 +163,20 @@
 <!-- ANSWER KEY
 
 
+    listSites({}).then(function (result) {
+        console.log("List Sites response:", result);
+        var sites = result.apiReturn.sites;
+        sites.forEach(function (site) { // Loop over the sites
+            var option = document.createElement("option");
+            option.text = site.path.path;
+            option.value = site.path.path;
+            sitesSelect.add(option);
+        });
+        results.innerHTML += "<p>✓ " + sitesSelect.options.length + " site(s) loaded!</p>";
+    }).catch(function (error) {
+        console.log("List sites error:", error);
+    });
+
     function loopFolder(path, site) {
         return readAsset({
             type: "folder",
@@ -146,7 +199,7 @@
                         console.log("List Subscribers response:", result);
 
                         var numberOfSubscribers = result.apiReturn.subscribers.length + result.apiReturn.manualSubscribers.length;
-
+                        
                         var style = numberOfSubscribers === 0 ? ' style="color: yellow;"' : '';
                         results.innerHTML += "<p" + style + ">" + numberOfSubscribers + " subscribers for " + child.path.path + "</p>";
 
