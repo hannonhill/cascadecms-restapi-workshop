@@ -97,8 +97,6 @@
                                 }).catch(function (error) {
                                     console.log("Edit error:", error);
                                 });
-                            } else {
-                                results.innerHTML += "<p>Skipping " + child.path.path + " because it already has CTA block</p>";
                             }
                         }).catch(function (error) {
                             console.log("Read error:", error);
