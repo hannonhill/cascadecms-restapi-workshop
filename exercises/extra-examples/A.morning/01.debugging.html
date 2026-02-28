@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <title>Additional Exercise: Debugging</title>
+    <link rel="stylesheet" href="../../../styles.css" />
+</head>
+
+<body>
+    <script src="../../../creds.js"></script>
+    <script src="../../../cascade-restapi.js"></script>
+    <script>
+        /* Extra Exercise A: Read an asset before doing an operation
+            It is best practice to ensure an asset does not exist first before copying it or creating a new one
+            If an asset does exist already, then a number will get appended to the file name in the CMS
+        */
+
+        /* Step 1.1: Fill in the type on line 20 and enter the ID of the asset on line 21 but make sure to enter INCORRECTLY*/
+        readAsset({
+            type: "block", //fill in
+            id: "8c363d310a0000d54fbffbc604b5d2e0"  // fill in
+        }).then(function (result) {
+            console.log(result);
+            // Note: You should see a 'Requested asset does not exist' error message
+            
+            /* Extra Exercise B: Bad API key
+            Step 2.1: Fill in the correct type and ID in the readAsset operation above
+            Step 2.2: Either comment out the creds.js script on line 10 or remove your API key from the cascade-restapi.js file
+            Step 2.3: Run the readAsset again
+            Note: You should see a 'A valid API Key must be provided in order to perform requests.' error message
+            */
+
+            /* Extra Exercise C: Bad Edit operation
+            Step 3.1: Uncomment lines 36-44
+            */
+            // var tags = result.apiReturn.asset.xhtmlDataDefinitionBlock.tags;
+            // tags.push(''); // fill in with any value
+            // editAsset({
+            //     asset: result.apiReturn,
+            // }).then(function (result) {
+            //     console.log(result);
+            // }).catch(function (error) {
+            //     console.log(error);
+            // });
+            // Note: You should get an error stating that an object was expected but a string was instead found
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+    <h1>Extra Exercise: Debugging with REST</h1>
+    <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
+</body>
+
+</html>
