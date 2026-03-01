@@ -96,7 +96,7 @@
                         site.timeToPublish = ""; // Step 2: fill in
                     }
 
-                    editAsset({
+                    editAsset({ // Edit the site
                         asset: result.apiReturn
                     }).then(function (result) {
                         results.innerHTML += '<p>Scheduled publishing ' + (enablePublishing ? 'enabled' : 'disabled') + ' for ' + siteName + (enablePublishing ? ' at ' + publishTime : '') + '</p>';
@@ -138,40 +138,28 @@
 
             var completed = 0;
             selectedSites.forEach(function (siteName) {
-                readAsset({ // Check if AF already exists
-                    path: assetFactoryPath,
-                    siteName: siteName,
-                    type: "assetfactory"
+                copyAsset({
+                    path: "", // Step 3: fill in
+                    siteName: "CUC26 Web Services Essentials Workshop - Presentation",
+                    type: "", // Step 3: fill in
+                    copyParameters: {
+                        destinationContainerIdentifier: { // This is the location you are copying to
+                            path: {
+                                path: "/",
+                                siteName: siteName
+                            },
+                            type: "" // Step 3: fill in
+                        },
+                        "newName": assetFactoryPath
+                    }
                 }).then(function (result) {
-                    results.innerHTML += '<p>Asset Factory already exists in ' + siteName + '</p>';
+                    results.innerHTML += '<p>Asset Factory copied to ' + siteName + '</p>';
                     completed++;
                     if (completed === selectedSites.length) {
                         results.innerHTML += '<p><strong>✓ Done copying Asset Factory to all selected sites.</strong></p>';
                     }
-                }).catch(function (error) { // Create AF if it doesn't exist
-                    copyAsset({
-                        path: "", // Step 3: fill in
-                        siteName: "CUC26 Web Services Essentials Workshop - Presentation",
-                        type: "", // Step 3: fill in
-                        copyParameters: {
-                            destinationContainerIdentifier: { // This is the location you are copying to
-                                path: {
-                                    path: "/",
-                                    siteName: siteName
-                                },
-                                type: "" // Step 3: fill in
-                            },
-                            "newName": assetFactoryPath
-                        }
-                    }).then(function (result) {
-                        results.innerHTML += '<p>Asset Factory copied to ' + siteName + '</p>';
-                        completed++;
-                        if (completed === selectedSites.length) {
-                            results.innerHTML += '<p><strong>✓ Done copying Asset Factory to all selected sites.</strong></p>';
-                        }
-                    }).catch(function (error) {
-                        console.log("Copy error:", error);
-                    });
+                }).catch(function (error) {
+                    console.log("Copy error:", error);
                 });
             });
         }
