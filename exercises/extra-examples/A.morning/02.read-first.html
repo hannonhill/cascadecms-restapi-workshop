@@ -3,21 +3,42 @@
 
 <head>
     <title>Additional Exercise: Read first before...</title>
-    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../../styles.css" />
 </head>
 
 <body>
-    <script src="../../creds.js"></script>
-    <script src="../../cascade-restapi.js"></script>
+    <script src="../../../creds.js"></script>
+    <script src="../../../cascade-restapi.js"></script>
     <script>
         /* Extra Exercise: Read an asset before doing an operation
             It is best practice to ensure an asset does not exist first before copying it or creating a new one
             If an asset does exist already, then a number will get appended to the file name in the CMS
         */
 
-        /* Step 1.1: */
+        /* Step 1.1: Read one of the program blocks. Fill in the asset type on line 20 and the ID on line 21 
+            Step 1.2: Ensure you are getting a successful response
+            Step 1.3: Write a copy operation on line 30 that creates a new program in the /_blocks/programs folder
+            Step 1.4: Once that is successful, comment out or remove your copy operation and write a delete operation that removes the same program you just created
+        */
+        readAsset({
+            type: "", //fill in
+            id: "", //fill in
+        }).then(function (result) {
+            if (result.apiReturn.success) {
+                console.log(result);
+                // write a copy asset operation here
+
+                // write a delete asset operation here
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
+
     </script>
-    <h1>Extra Exercise: Read an asset before an operation</h1>
+    <h1>
+        Extra Exercise: Read an asset before an operation
+        <span>We are going to practice reading before copying/deleting</span>
+    </h1>
     <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
 </body>
 
