@@ -26,11 +26,18 @@
 
         createAsset({
             asset: {
-                folder: {
-                    name: "new-folder", // fill in
+                page: {
+                    name: "test", // fill in
+                    // parentFolderId: "917ce9bc0a0000d50780423927bed193",
                     parentFolderPath: "_exercise-3", // fill in
-                    siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
-                    metadataSetId: "8c36425e0a0000d54fbffbc63fb66599"
+                    siteName: siteName, // fill in
+                    // metadataSetId: "8c36425e0a0000d54fbffbc63fb66599"
+                    contentTypeId: "8c33ae920a0000d54fbffbc6c071a678",
+
+                    xhtml: "<div>Content</div>",
+                    metadata: {
+                        title: "Page title"
+                    }
                 }
             }
         }).then(function (result) {
