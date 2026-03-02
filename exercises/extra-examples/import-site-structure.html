@@ -17,21 +17,20 @@
            like the principle... and the band! */
 
         /* Exercise 1: Automate creation of "skeleton" folders and pages by reading from two csv files 
-           (/workshop-scripts/csv/folders.csv) and (/workshop-scripts/csv/pages.csv) */
+           (/csv/folders.csv) and (/csv/pages.csv) */
 
         /* Step 1.1: Add your site name to the siteName variable  */
         /* Step 1.2: Follow instructor's demonstration as the script is reviewed. We will create the folders first then create 
            pages to populate in the folders in the Redesign folder on your site */
 
 
-        var siteName = "_WS-Master"; // fill in
+        var siteName = ""; // fill in
 
         // createFolders();
 
         // createPages();
 
         function createFolders() {
-            // Note: you'll want to make sure 
             Papa.parse('csv/folders.csv', {
                 header: true,
                 download: true,
@@ -102,7 +101,6 @@
         }
 
         function createPages() {
-            // Note: you'll want to make sure 
             Papa.parse('csv/pages.csv', {
                 header: true,
                 download: true,
@@ -123,7 +121,7 @@
                             copyAsset({
                                 type: "page",
                                 path: p.baseasset,
-                                siteName: siteName,
+                                siteName: "CUC26 Web Services Essentials Workshop - Presentation",
                                 copyParameters: {
                                     newName: pageName,
                                     destinationContainerIdentifier: {

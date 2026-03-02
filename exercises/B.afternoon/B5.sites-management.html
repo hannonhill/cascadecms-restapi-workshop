@@ -46,8 +46,8 @@
             var sites = result.apiReturn.sites;
             sites.forEach(function (site) { // Loop over the sites
                 var option = document.createElement("option");
-                option.text = site.path.path; // Step 1: fill in
-                option.value = site.path.path; // Step 1: fill in
+                option.text = ""; // Step 1: fill in
+                option.value = ""; // Step 1: fill in
                 sitesSelect.add(option);
             });
             results.innerHTML += "<p>✓ " + sitesSelect.options.length + " site(s) loaded!</p>";
