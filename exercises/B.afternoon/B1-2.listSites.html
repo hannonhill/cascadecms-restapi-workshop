@@ -16,21 +16,24 @@
         /* Step 2: Open file in browser and view console log */
         /* Bonus Exercise: Read each site and output the response */
 
-        listSites({}).then(function (result) {
-            console.log("List Sites response:", result);
-            var sites = result.apiReturn.sites;
-            sites.forEach(function (site) { // Loop over the sites
-                
-                console.log("Site object:", site); // Hint: Look at the site object in the console log to find the property that contains the name of the site
-                // Output the name of each site
-                console.log("Site name:", ); // Step 1: fill in
+        (async () => {
+            try {
+                const result = await listSites({});
+                console.log("List Sites response:", result);
+                const sites = result.apiReturn.sites;
+                for (const site of sites) { // Loop over the sites
 
-            });
-        }).catch(function (error) {
-            console.log(error);
-        });
+                    console.log("Site object:", site); // Hint: Look at the site object in the console log to find the property that contains the name of the site
+                    // Output the name of each site
+                    console.log("Site name:", ); // Step 1: fill in
+
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     </script>
-    
+
     <h1>Exercise B1-2: List Sites</h1>
     <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
 </body>
@@ -87,26 +90,33 @@
 <!-- ANSWER KEY
 
 
-    listSites({}).then(function (result) {
-        console.log("List Sites response:", result);
-        var sites = result.apiReturn.sites;
-        sites.forEach(function (site) { // Loop over the sites
+    (async () => {
+        let result;
+        try {
+            result = await listSites({});
+            console.log("List Sites response:", result);
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+
+        const sites = result.apiReturn.sites;
+        for (const site of sites) { // Loop over the sites
             // Output the name of each site
             console.log("Site name:", site.path.path);
 
             // Bonus Exercise
-            readAsset({
-                type: "site",
-                id: site.id,
-            }).then(function (result) {
-                console.log("Read response:", result);
-            }).catch(function (error) {
+            try {
+                const readResult = await readAsset({
+                    type: "site",
+                    id: site.id,
+                });
+                console.log("Read response:", readResult);
+            } catch (error) {
                 console.log(error);
-            });
-        });
-    }).catch(function (error) {
-        console.log(error);
-    });
+            }
+        }
+    })();
 
 
 -->

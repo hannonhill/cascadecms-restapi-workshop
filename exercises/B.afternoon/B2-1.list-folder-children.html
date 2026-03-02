@@ -16,33 +16,39 @@
         /* Step 2: Add the child asset's type and id to the read operation (lines 35-36) */
         /* Step 3: Save, open file in browser, view console log */
         /* Bonus Exercise: Make it a recursive function and if the child asset type is a folder, read its children as well, so you read the entire site */
-        
-        readAsset({
-            type: "folder",
-            path: root, // Set in cascade-restapi.js
-            siteName: siteName // Set in cascade-restapi.js
-            // Note: If we didn't use "%252F" for the root folder path, the request would be "{URL}/read/folder/siteName//" which looks malformed
-        }).then(function (result) {
 
-            console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
-            var folderChildren = result; // Step 1: fill in
+        (async () => {
+            let result;
+            try {
+                result = await readAsset({
+                    type: "folder",
+                    path: root, // Set in cascade-restapi.js
+                    siteName: siteName // Set in cascade-restapi.js
+                    // Note: If we didn't use "%252F" for the root folder path, the request would be "{URL}/read/folder/siteName//" which looks malformed
+                });
+                console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
+            } catch (error) {
+                console.log(error);
+                return;
+            }
 
-            folderChildren.forEach(function (child) { // Loop over the folder's children
-                
+            const folderChildren = result; // Step 1: fill in
+
+            for (const child of folderChildren) { // Loop over the folder's children
+
                 console.log("Child asset:", child); // Hint: Look at each child in the console log to find the properties that specify the child's type and ID, which we will need to read the child asset
 
-                readAsset({ // Read each child asset to get more information about it
-                    type: child, // Step 2: fill in
-                    id: child, // Step 2: fill in
-                }).then(function (result) {
-                    console.log("Read child asset response:", result);
-                }).catch(function (error) {
+                try {
+                    const childResult = await readAsset({ // Read each child asset to get more information about it
+                        type: child, // Step 2: fill in
+                        id: child, // Step 2: fill in
+                    });
+                    console.log("Read child asset response:", childResult);
+                } catch (error) {
                     console.log(error);
-                });
-            });
-        }).catch(function (error) {
-            console.log(error);
-        });
+                }
+            }
+        })();
     </script>
 
     <h1>Exercise B2-1: List Folder Children</h1>
@@ -102,34 +108,39 @@
 
 
     loopFolder(root, siteName); // Set in cascade-restapi.js
-    function loopFolder(path, site) {
-        readAsset({
-            type: "folder",
-            path: path,
-            siteName: site
-        }).then(function (result) {
-            // console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
-            var folderChildren = result.apiReturn.asset.folder.children;
+    async function loopFolder(path, site) {
+        let result;
+        try {
+            result = await readAsset({
+                type: "folder",
+                path: path,
+                siteName: site
+            });
+        } catch (error) {
+            console.log(error);
+            return;
+        }
 
-            folderChildren.forEach(function (child) { // Loop over the folder's children
-                // console.log("Child asset:", child); // Hint: Look at each child in the console log to find the properties that specify the child's type and ID, which we will need to read the child asset
-                if (child.type === "folder") {
-                    console.log("Looping folder:", child.path.path);
-                    loopFolder(child.path.path, siteName); // Recursive call to loopFolder function with the child folder's path and site name to read its children
-                } else {
-                    readAsset({ // Read each child asset to get more information about it
+        // console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
+        const folderChildren = result.apiReturn.asset.folder.children;
+
+        for (const child of folderChildren) { // Loop over the folder's children
+            // console.log("Child asset:", child); // Hint: Look at each child in the console log to find the properties that specify the child's type and ID, which we will need to read the child asset
+            if (child.type === "folder") {
+                console.log("Looping folder:", child.path.path);
+                await loopFolder(child.path.path, siteName); // Recursive call to loopFolder function with the child folder's path and site name to read its children
+            } else {
+                try {
+                    const childResult = await readAsset({ // Read each child asset to get more information about it
                         type: child.type,
                         id: child.id,
-                    }).then(function (result) {
-                        console.log("Read child asset response:", result);
-                    }).catch(function (error) {
-                        console.log(error);
                     });
+                    console.log("Read child asset response:", childResult);
+                } catch (error) {
+                    console.log(error);
                 }
-            });
-        }).catch(function (error) {
-            console.log(error);
-        });
+            }
+        }
     }
 
 

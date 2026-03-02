@@ -25,11 +25,11 @@
         /* Step 2: Check the content type of the page, and only edit if it is a Landing Page (line 61) */
         /* Step 3: Add the CTA block to the last row of the page (lines 79-85) */
         /* Step 4: Save, open file in browser, and update pages! Check the console for any errors */
-        /* Bonus Exercise:  Check if the last row already has the CTA block attached and skip the edit if so. 
+        /* Bonus Exercise:  Check if the last row already has the CTA block attached and skip the edit if so.
                             This helps make the script reusable without duplicating content. */
 
-        var results = document.getElementById("messages");
-        var CTABlockID = "8c363cd20a0000d54fbffbc6c7393eb5"; // Step 1: fill in
+        const results = document.getElementById("messages");
+        const CTABlockID = "8c363cd20a0000d54fbffbc6c7393eb5"; // Step 1: fill in
 
         async function updatePages() {
             results.innerHTML += "<p><strong>Updating pages in " + siteName + "</strong></p>";
@@ -37,79 +37,78 @@
             results.innerHTML += "<p><strong>✓ Done updating in " + siteName + "</strong></p>";
         }
 
-        function loopFolder(path, site) {
-            return readAsset({
-                type: "folder",
-                path: path,
-                siteName: site
-            }).then(function (result) {
-                var folderChildren = result.apiReturn.asset.folder.children;
-                // Collect all promises for children
-                var childPromises = folderChildren.map(function (child) {
-                    if (child.type === "folder") {
-                        console.log("Looping folder:", child.path.path);
-                        // Return the recursive promise
-                        return loopFolder(child.path.path, site);
-                    } else if (child.type === "page") { // Only read pages
-                        return readAsset({
+        async function loopFolder(path, site) {
+            let result;
+            try {
+                result = await readAsset({
+                    type: "folder",
+                    path: path,
+                    siteName: site
+                });
+            } catch (error) {
+                console.log(error);
+                return;
+            }
+
+            const folderChildren = result.apiReturn.asset.folder.children;
+            // Process children one at a time
+            for (const child of folderChildren) {
+                if (child.type === "folder") {
+                    console.log("Looping folder:", child.path.path);
+                    await loopFolder(child.path.path, site);
+                } else if (child.type === "page") { // Only read pages
+                    try {
+                        const readResult = await readAsset({
                             id: child.id,
                             type: "page",
-                        }).then(function (result) {
-                            console.log("Read response:", result);
-
-                            var page = result.apiReturn.asset.page;
-                            if (page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") { // Step 2: fill in
-                                var structuredDataNodes = page.structuredData.structuredDataNodes;
-                                // Make the modifications to the page
-
-                                // Hint: Look at the first row on the landing master page
-                                console.log("First row:", structuredDataNodes[1]);
-                                var newRow = {
-                                    "type"                  : "group",
-                                    "identifier"            : "row",
-                                    "structuredDataNodes"   : [
-                                        {
-                                            "type"          : "text",
-                                            "identifier"    : "type",
-                                            "text"          : "buttons"
-                                        },
-                                        {
-                                            "type"          : "text",
-                                            "identifier"    : "dataSource",
-                                            "text"          : "" // Step 3: fill in
-                                        },
-                                        {
-                                            "type"          : "asset",
-                                            "identifier"    : "block",
-                                            "assetType"     : "", // Step 3: fill in
-                                            "blockId"       : "" // Step 3: fill in
-                                        }
-                                    ]
-                                };
-                                structuredDataNodes.push(newRow);
-
-                                // The modified asset is submitted to Cascade with an edit
-                                return editAsset({
-                                    asset: result.apiReturn,
-                                }).then(function (result) {
-                                    console.log("Edit response:", result);
-                                    results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
-                                }).catch(function (error) {
-                                    console.log("Edit error:", error);
-                                });
-                            }
-                        }).catch(function (error) {
-                            console.log("Read error:", error);
                         });
+                        console.log("Read response:", readResult);
+
+                        const page = readResult.apiReturn.asset.page;
+                        if (page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") { // Step 2: fill in
+                            const structuredDataNodes = page.structuredData.structuredDataNodes;
+                            // Make the modifications to the page
+
+                            // Hint: Look at the first row on the landing master page
+                            console.log("First row:", structuredDataNodes[1]);
+                            const newRow = {
+                                "type"                  : "group",
+                                "identifier"            : "row",
+                                "structuredDataNodes"   : [
+                                    {
+                                        "type"          : "text",
+                                        "identifier"    : "type",
+                                        "text"          : "buttons"
+                                    },
+                                    {
+                                        "type"          : "text",
+                                        "identifier"    : "dataSource",
+                                        "text"          : "" // Step 3: fill in
+                                    },
+                                    {
+                                        "type"          : "asset",
+                                        "identifier"    : "block",
+                                        "assetType"     : "", // Step 3: fill in
+                                        "blockId"       : "" // Step 3: fill in
+                                    }
+                                ]
+                            };
+                            structuredDataNodes.push(newRow);
+
+                            // The modified asset is submitted to Cascade with an edit
+                            const editResult = await editAsset({
+                                asset: readResult.apiReturn,
+                            });
+                            console.log("Edit response:", editResult);
+                            results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
+                        }
+                    } catch (error) {
+                        console.log("Page error:", error);
                     }
-                });
-                // Wait for all children to finish
-                return Promise.all(childPromises);
-            }).catch(function (error) {
-                console.log(error);
-            });
+                }
+            }
         }
-    
+
     </script>
 </body>
 
@@ -165,81 +164,81 @@
 <!-- ANSWER KEY
 
 
-    function loopFolder(path, site) {
-        return readAsset({
-            type: "folder",
-            path: path,
-            siteName: site
-        }).then(function (result) {
-            var folderChildren = result.apiReturn.asset.folder.children;
-            // Collect all promises for children
-            var childPromises = folderChildren.map(function (child) {
-                if (child.type === "folder") {
-                    console.log("Looping folder:", child.path.path);
-                    // Return the recursive promise
-                    return loopFolder(child.path.path, site);
-                } else if (child.type === "page") { // Only read pages
-                    return readAsset({
+    async function loopFolder(path, site) {
+        let result;
+        try {
+            result = await readAsset({
+                type: "folder",
+                path: path,
+                siteName: site
+            });
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+
+        const folderChildren = result.apiReturn.asset.folder.children;
+        // Process children one at a time
+        for (const child of folderChildren) {
+            if (child.type === "folder") {
+                console.log("Looping folder:", child.path.path);
+                await loopFolder(child.path.path, site);
+            } else if (child.type === "page") { // Only read pages
+                try {
+                    const readResult = await readAsset({
                         id: child.id,
                         type: "page",
-                    }).then(function (result) {
-                        // console.log("Read response:", result);
-
-                        var page = result.apiReturn.asset.page;
-                        if (page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") {
-                            var structuredDataNodes = page.structuredData.structuredDataNodes;
-                            var lastRow = structuredDataNodes[structuredDataNodes.length - 1];
-                            if (lastRow.structuredDataNodes[0].text != "buttons" && lastRow.structuredDataNodes[1].text != "block" && lastRow.structuredDataNodes[2].blockId != CTABlockID) { // Make sure the CTA block is not already there
-                                // Make the modifications to the page
-                                var newRow = {
-                                    "type"                  : "group",
-                                    "identifier"            : "row",
-                                    "structuredDataNodes"   : [
-                                        {
-                                            "type"          : "text",
-                                            "identifier"    : "type",
-                                            "text"          : "buttons"
-                                        },
-                                        {
-                                            "type"          : "text",
-                                            "identifier"    : "dataSource",
-                                            "text"          : "block"
-                                        },
-                                        {
-                                            "type"          : "asset",
-                                            "identifier"    : "block",
-                                            "assetType"     : "block",
-                                            "blockId"       : CTABlockID
-                                        }
-                                    ]
-                                };
-                                structuredDataNodes.push(newRow);
-
-                                // The modified asset is submitted to Cascade with an edit
-                                return editAsset({
-                                    asset: result.apiReturn,
-                                }).then(function (result) {
-                                    console.log("Edit response:", result);
-                                    results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
-                                }).catch(function (error) {
-                                    console.log("Edit error:", error);
-                                });
-                            } else {
-                                results.innerHTML += "<p>Skipping " + child.path.path + " because it already has CTA block</p>";
-                            }
-                        }
-                    }).catch(function (error) {
-                        console.log("Read error:", error);
                     });
+                    // console.log("Read response:", readResult);
+
+                    const page = readResult.apiReturn.asset.page;
+                    if (page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") {
+                        const structuredDataNodes = page.structuredData.structuredDataNodes;
+                        const lastRow = structuredDataNodes[structuredDataNodes.length - 1];
+                        if (lastRow.structuredDataNodes[0].text != "buttons" && lastRow.structuredDataNodes[1].text != "block" && lastRow.structuredDataNodes[2].blockId != CTABlockID) { // Make sure the CTA block is not already there
+                            // Make the modifications to the page
+                            const newRow = {
+                                "type"                  : "group",
+                                "identifier"            : "row",
+                                "structuredDataNodes"   : [
+                                    {
+                                        "type"          : "text",
+                                        "identifier"    : "type",
+                                        "text"          : "buttons"
+                                    },
+                                    {
+                                        "type"          : "text",
+                                        "identifier"    : "dataSource",
+                                        "text"          : "block"
+                                    },
+                                    {
+                                        "type"          : "asset",
+                                        "identifier"    : "block",
+                                        "assetType"     : "block",
+                                        "blockId"       : CTABlockID
+                                    }
+                                ]
+                            };
+                            structuredDataNodes.push(newRow);
+
+                            // The modified asset is submitted to Cascade with an edit
+                            const editResult = await editAsset({
+                                asset: readResult.apiReturn,
+                            });
+                            console.log("Edit response:", editResult);
+                            results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
+                        } else {
+                            results.innerHTML += "<p>Skipping " + child.path.path + " because it already has CTA block</p>";
+                        }
+                    }
+                } catch (error) {
+                    console.log("Page error:", error);
                 }
-            });
-            // Wait for all children to finish
-            return Promise.all(childPromises);
-        }).catch(function (error) {
-            console.log(error);
-        });
+            }
+        }
     }
-    
+
 
 
 -->
+

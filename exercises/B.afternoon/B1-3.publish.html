@@ -18,17 +18,20 @@
         /* Step 4: Change publishInformation to unpublish true (line 25), repeat steps 2 and 3 to see the asset unpublished */
         /* Bonus Exercise: Add a destination parameter to publishInformation using the Workshops destination in the same site as the asset you are publishing */
 
-        publishAsset({
-            type: "", // Step 1: fill in
-            id: "", // Step 1: fill in
-            publishInformation: {
-                unpublish: false // Step 4: Enable to unpublish the asset
+        (async () => {
+            try {
+                const result = await publishAsset({
+                    type: "", // Step 1: fill in
+                    id: "", // Step 1: fill in
+                    publishInformation: {
+                        unpublish: false // Step 4: Enable to unpublish the asset
+                    }
+                });
+                console.log("Publish response:", result);
+            } catch (error) {
+                console.log(error);
             }
-        }).then(function (result) {
-            console.log("Publish response:", result);
-        }).catch(function (error) {
-            console.log(error);
-        });
+        })();
     </script>
 
     <h1>Exercise B1-3: Publish / Unpublish</h1>
@@ -87,26 +90,29 @@
 <!-- ANSWER KEY
 
 
-        publishAsset({
-            type: "page",
-            id: "68e16244c0a8002f77f581826b6ab573",
-            publishInformation: {
-                unpublish: false, // Enable if you want to unpublish the asset instead of publish
-                destinations: [
-                    {
-                        path: {
-                            path: "Workshops",
-                            siteName: siteName
-                        },
-                        type: "destination"
+        (async () => {
+            try {
+                const result = await publishAsset({
+                    type: "page",
+                    id: "68e16244c0a8002f77f581826b6ab573",
+                    publishInformation: {
+                        unpublish: false, // Enable if you want to unpublish the asset instead of publish
+                        destinations: [
+                            {
+                                path: {
+                                    path: "Workshops",
+                                    siteName: siteName
+                                },
+                                type: "destination"
+                            }
+                        ]
                     }
-                ]
+                });
+                console.log("Publish response:", result);
+            } catch (error) {
+                console.log(error);
             }
-        }).then(function (result) {
-            console.log("Publish response:", result);
-        }).catch(function (error) {
-            console.log(error);
-        });
+        })();
 
 
 -->

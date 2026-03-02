@@ -17,233 +17,192 @@ const headers = { Authorization: "Bearer " + cmsAPI };
 
 const root = "%252F"; // Double-encoded forward slash ( / ) - used to read the root folder by path
 
-function readAsset(a) {
+async function readAsset(a) {
+	let url;
 	if (a.type == "user") {
-		var url = cmsUrl + "api/v1/read/" + a.type + "/" + a.path;
+		url = cmsUrl + "api/v1/read/" + a.type + "/" + a.path;
 	} else if (a.path) {
-		var url = cmsUrl + "api/v1/read/" + a.type + "/" + a.siteName + "/" + a.path;
+		url = cmsUrl + "api/v1/read/" + a.type + "/" + a.siteName + "/" + a.path;
 	} else if (a.id) {
-		var url = cmsUrl + "api/v1/read/" + a.type + "/" + a.id;
+		url = cmsUrl + "api/v1/read/" + a.type + "/" + a.id;
 	}
 	url = url.replace(/\\\\/g, "\\");
 	if (a.debug) {
 		console.log("Fetch URL " + url);
 	}
-	return new Promise(function (resolve, reject) {
-		fetch(url, { headers: headers })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ read_status: "Success", sent: a, apiReturn: data, url: url });
-				} else {
-					reject({ read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-				}
-			});
-	});
+	const r = await fetch(url, { headers: headers });
+	const data = await r.json();
+	if (data.success) {
+		return { read_status: "Success", sent: a, apiReturn: data, url: url };
+	} else {
+		throw { read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+	}
 }
 
-function editAsset(a) {
-	return new Promise(function (resolve, reject) {
-		fetch(cmsUrl + "api/v1/edit", { method: "POST", headers: headers, body: JSON.stringify({ asset: a.asset.asset }) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ edit_status: "Success", sent: a, apiReturn: data });
-				} else {
-					reject({ edit_status: "Error", error: data.message, sent: a, apiReturn: data });
-				}
-			});
-	});
+async function editAsset(a) {
+	const r = await fetch(cmsUrl + "api/v1/edit", { method: "POST", headers: headers, body: JSON.stringify({ asset: a.asset.asset }) });
+	const data = await r.json();
+	if (data.success) {
+		return { edit_status: "Success", sent: a, apiReturn: data };
+	} else {
+		throw { edit_status: "Error", error: data.message, sent: a, apiReturn: data };
+	}
 }
 
-function copyAsset(a) {
+async function copyAsset(a) {
+	let url;
 	if (a.path) {
-		var url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.siteName + "/" + a.path;
+		url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.siteName + "/" + a.path;
 	} else if (a.id) {
-		var url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.id;
+		url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.id;
 	}
 	url = url.replace(/\\\\/g, "\\");
-	return new Promise(function (resolve, reject) {
-		fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ copyParameters: a.copyParameters }) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ copy_status: "Success", sent: a, apiReturn: data, url: url });
-				} else {
-					reject({ copy_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-				}
-			});
-	});
+	const r = await fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ copyParameters: a.copyParameters }) });
+	const data = await r.json();
+	if (data.success) {
+		return { copy_status: "Success", sent: a, apiReturn: data, url: url };
+	} else {
+		throw { copy_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+	}
 }
 
-function moveAsset(a) {
+async function moveAsset(a) {
+	let url;
 	if (a.path) {
-		var url = cmsUrl + "api/v1/move/" + a.type + "/" + a.siteName + "/" + a.path;
+		url = cmsUrl + "api/v1/move/" + a.type + "/" + a.siteName + "/" + a.path;
 	} else if (a.id) {
-		var url = cmsUrl + "api/v1/move/" + a.type + "/" + a.id;
+		url = cmsUrl + "api/v1/move/" + a.type + "/" + a.id;
 	}
 	url = url.replace(/\\\\/g, "\\");
-	return new Promise(function (resolve, reject) {
-		fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ moveParameters: a.moveParameters }) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ move_status: "Success", sent: a, apiReturn: data, url: url });
-				} else {
-					reject({ move_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-				}
-			});
-	});
+	const r = await fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ moveParameters: a.moveParameters }) });
+	const data = await r.json();
+	if (data.success) {
+		return { move_status: "Success", sent: a, apiReturn: data, url: url };
+	} else {
+		throw { move_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+	}
 }
 
-function deleteAsset(a) {
+async function deleteAsset(a) {
+	let url;
 	if (a.path) {
-		var url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.siteName + "/" + a.path;
+		url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.siteName + "/" + a.path;
 	} else if (a.id) {
-		var url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.id;
+		url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.id;
 	}
 	url = url.replace(/\\\\/g, "\\");
-	return new Promise(function (resolve, reject) {
-		fetch(url, { method: "POST", headers: headers })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ delete_status: "Success", sent: a, apiReturn: data, url: url });
-				} else {
-					reject({ delete_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-				}
-			});
-	});
+	const r = await fetch(url, { method: "POST", headers: headers });
+	const data = await r.json();
+	if (data.success) {
+		return { delete_status: "Success", sent: a, apiReturn: data, url: url };
+	} else {
+		throw { delete_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+	}
 }
 
-function createAsset(a) {
-	return new Promise(function (resolve, reject) {
-		fetch(cmsUrl + "api/v1/create", { method: "POST", headers: headers, body: JSON.stringify({ asset: a.asset }) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ create_status: "Success", sent: a, apiReturn: data });
-				} else {
-					reject({ create_status: "Error", error: data.message, sent: a, apiReturn: data });
-				}
-			});
-	});
+async function createAsset(a) {
+	const r = await fetch(cmsUrl + "api/v1/create", { method: "POST", headers: headers, body: JSON.stringify({ asset: a.asset }) });
+	const data = await r.json();
+	if (data.success) {
+		return { create_status: "Success", sent: a, apiReturn: data };
+	} else {
+		throw { create_status: "Error", error: data.message, sent: a, apiReturn: data };
+	}
 }
 
-function listSubscribers(a) {
+async function listSubscribers(a) {
+	let url;
 	if (a.path) {
-		var url = cmsUrl + "api/v1/listSubscribers/" + a.type + "/" + a.siteName + "/" + a.path;
+		url = cmsUrl + "api/v1/listSubscribers/" + a.type + "/" + a.siteName + "/" + a.path;
 	} else if (a.id) {
-		var url = cmsUrl + "api/v1/listSubscribers/" + a.type + "/" + a.id;
+		url = cmsUrl + "api/v1/listSubscribers/" + a.type + "/" + a.id;
 	}
 	url = url.replace(/\\\\/g, "\\");
 	if (a.debug) {
 		console.log("Fetch URL " + url);
 	}
-	return new Promise(function (resolve, reject) {
-		fetch(url, { headers: headers })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ listSubscribers_status: "Success", sent: a, apiReturn: data, url: url });
-				} else {
-					reject({ listSubscribers_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-				}
-			});
-	});
+	const r = await fetch(url, { headers: headers });
+	const data = await r.json();
+	if (data.success) {
+		return { listSubscribers_status: "Success", sent: a, apiReturn: data, url: url };
+	} else {
+		throw { listSubscribers_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+	}
 }
 
-function relationships(a) {
+async function relationships(a) {
+    let url;
     if (a.path) {
-        var url = cmsUrl + "api/v1/relationships/" + a.type + "/" + a.siteName + "/" + a.path;
+        url = cmsUrl + "api/v1/relationships/" + a.type + "/" + a.siteName + "/" + a.path;
     } else if (a.id) {
-        var url = cmsUrl + "api/v1/relationships/" + a.type + "/" + a.id;
+        url = cmsUrl + "api/v1/relationships/" + a.type + "/" + a.id;
     }
     url = url.replace(/\\\\/g, "\\");
     if (a.debug) {
         console.log("Fetch URL " + url);
     }
-    return new Promise(function (resolve, reject) {
-        fetch(url, { headers: headers })
-            .then((r) => r.json())
-            .then((data) => {
-                if (data.success) {
-                    resolve({ relationships_status: "Success", sent: a, apiReturn: data, url: url });
-                } else {
-                    reject({ relationships_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-                }
-            });
-    });
+    const r = await fetch(url, { headers: headers });
+    const data = await r.json();
+    if (data.success) {
+        return { relationships_status: "Success", sent: a, apiReturn: data, url: url };
+    } else {
+        throw { relationships_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+    }
 }
 
-function listSites(a) {
-	return new Promise(function (resolve, reject) {
-		fetch(cmsUrl + "api/v1/listSites", { headers: headers })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ listSites_status: "Success", sent: a, apiReturn: data });
-				} else {
-					reject({ listSites_status: "Error", error: data.message, sent: a, apiReturn: data });
-				}
-			});
-	});
+async function listSites(a) {
+	const r = await fetch(cmsUrl + "api/v1/listSites", { headers: headers });
+	const data = await r.json();
+	if (data.success) {
+		return { listSites_status: "Success", sent: a, apiReturn: data };
+	} else {
+		throw { listSites_status: "Error", error: data.message, sent: a, apiReturn: data };
+	}
 }
 
-function copySite(a) {
-	return new Promise(function (resolve, reject) {
-		fetch(cmsUrl + "api/v1/siteCopy", { method: "POST", headers: headers, body: JSON.stringify(a) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ edit_status: "Success", sent: a, apiReturn: data });
-				} else {
-					reject({ edit_status: "Error", error: data.message, sent: a, apiReturn: data });
-				}
-			});
-	});
+async function copySite(a) {
+	const r = await fetch(cmsUrl + "api/v1/siteCopy", { method: "POST", headers: headers, body: JSON.stringify(a) });
+	const data = await r.json();
+	if (data.success) {
+		return { edit_status: "Success", sent: a, apiReturn: data };
+	} else {
+		throw { edit_status: "Error", error: data.message, sent: a, apiReturn: data };
+	}
 }
 
-function search(a) {
-	return new Promise(function (resolve, reject) {
-		fetch(cmsUrl + "api/v1/search", { method: "POST", headers: headers, body: JSON.stringify({ searchInformation: a.searchInformation }) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ search_status: "Success", sent: a, apiReturn: data });
-				} else {
-					reject({ search_status: "Error", error: data.message, sent: a, apiReturn: data });
-				}
-			});
-	});
+async function search(a) {
+	const r = await fetch(cmsUrl + "api/v1/search", { method: "POST", headers: headers, body: JSON.stringify({ searchInformation: a.searchInformation }) });
+	const data = await r.json();
+	if (data.success) {
+		return { search_status: "Success", sent: a, apiReturn: data };
+	} else {
+		throw { search_status: "Error", error: data.message, sent: a, apiReturn: data };
+	}
 }
 
-function publishAsset(a) {
+async function publishAsset(a) {
+	let url;
 	if (a.path) {
-		var url = cmsUrl + "api/v1/publish/" + a.type + "/" + a.siteName + "/" + a.path;
+		url = cmsUrl + "api/v1/publish/" + a.type + "/" + a.siteName + "/" + a.path;
 	} else if (a.id) {
-		var url = cmsUrl + "api/v1/publish/" + a.type + "/" + a.id;
+		url = cmsUrl + "api/v1/publish/" + a.type + "/" + a.id;
 	}
 	url = url.replace(/\\\\/g, "\\");
 	if (a.debug) {
 		console.log("Fetch URL " + url);
 	}
-	return new Promise(function (resolve, reject) {
-		fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ publishInformation: a.publishInformation }) })
-			.then((r) => r.json())
-			.then((data) => {
-				if (data.success) {
-					resolve({ read_status: "Success", sent: a, apiReturn: data, url: url });
-				} else {
-					reject({ read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
-				}
-			});
-	});
+	const r = await fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ publishInformation: a.publishInformation }) });
+	const data = await r.json();
+	if (data.success) {
+		return { read_status: "Success", sent: a, apiReturn: data, url: url };
+	} else {
+		throw { read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url };
+	}
 }
 
 function dateToDateTime(d) {
-	var d = new Date(d);
-	return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString();
+	const date = new Date(d);
+	return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
 }
 
 function v(text) {
@@ -268,7 +227,7 @@ function w(text) {
 }
 
 function camelCase(data) {
-	var text = data
+	let text = data
 		.replaceAll("2", "Two")
 		.replaceAll("3", "Three")
 		.replaceAll("4", "Four")
@@ -279,8 +238,8 @@ function camelCase(data) {
 		.replaceAll("and ", "")
 		.replaceAll(/[^a-zA-Z0-9 .]+/g, "");
 	if (data.includes(" ")) {
-		var dataSplit = text.split(" ");
-		dataSplit.forEach(function (dS, i) {
+		const dataSplit = text.split(" ");
+		dataSplit.forEach((dS, i) => {
 			if (i == 0) {
 				text = dS.toLowerCase();
 			} else {
@@ -294,48 +253,49 @@ function camelCase(data) {
 }
 
 function decodeHTMLEntities(text) {
-	var textArea = document.createElement("textarea");
+	const textArea = document.createElement("textarea");
 	textArea.innerHTML = text;
 	return textArea.value;
 }
 
 function encodeHTMLEntities(text) {
-	var textArea = document.createElement("textarea");
+	const textArea = document.createElement("textarea");
 	textArea.innerText = text;
 	return textArea.innerHTML;
 }
 
-function fieldValueTest(ct, n) {
-	listSubscribers({
-		type: "contenttype",
-		id: ct,
-	})
-		.then(function (result) {
-			console.log(result);
-			result.apiReturn.subscribers.forEach(function (sub) {
-				if (sub.type == "page") {
-					readAsset({
-						type: "page",
-						id: sub.id,
-					})
-						.then(function (result) {
-							console.log(result);
-							console.log(result.apiReturn.asset.page.path);
-							if (eval(n) != undefined) {
-								console.log("DEFINED: " + eval(n));
-							} else {
-								console.log("UNDEFINED");
-							}
-							console.log("-----------------");
-						})
-						.catch(function (error) {
-							console.log(error);
-							console.log("-----------------");
-						});
-				}
-			});
-		})
-		.catch(function (error) {
-			console.log(error);
+async function fieldValueTest(ct, n) {
+	let result;
+	try {
+		result = await listSubscribers({
+			type: "contenttype",
+			id: ct,
 		});
+		console.log(result);
+	} catch (error) {
+		console.log(error);
+		return;
+	}
+
+	for (const sub of result.apiReturn.subscribers) {
+		if (sub.type == "page") {
+			try {
+				const readResult = await readAsset({
+					type: "page",
+					id: sub.id,
+				});
+				console.log(readResult);
+				console.log(readResult.apiReturn.asset.page.path);
+				if (eval(n) != undefined) {
+					console.log("DEFINED: " + eval(n));
+				} else {
+					console.log("UNDEFINED");
+				}
+				console.log("-----------------");
+			} catch (error) {
+				console.log(error);
+				console.log("-----------------");
+			}
+		}
+	}
 }

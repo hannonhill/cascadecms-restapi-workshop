@@ -35,8 +35,8 @@
         /* Step 4: Remove debug limiter (line 53), run full import, check results in Cascade */
         /* Bonus Exercise: Add a check to see if the program block already exists before copying the base asset, and skip to edit if it does exist */
 
-        var baseAssetID = "8c33ae660a0000d54fbffbc698a64161";
-        var programFolderPath = "_blocks/programs";
+        const baseAssetID = "8c33ae660a0000d54fbffbc698a64161";
+        const programFolderPath = "_blocks/programs";
 
         function importPrograms(file) {
             Papa.parse(file, {
@@ -44,12 +44,12 @@
                 download: true,
                 delimiter: ",",
                 skipEmptyLines: true,
-                transformHeader: function (h) {
+                transformHeader: (h) => {
                     return h.replace(/[\W_]+/g, "").trim(); // Update header values so they can be used as a property later
                 },
-                complete: function (result) {
+                complete: (result) => {
                     console.log("All data:", result);
-                    result.data.forEach(function (program, index) { // Loop over each line in the CSV
+                    result.data.forEach((program, index) => { // Loop over each line in the CSV
                         if (index < 1) { // Debugging line, remove to import all programs
                             createProgramBlock(program);
                         }
@@ -58,46 +58,45 @@
             });
         }
 
-        function createProgramBlock(p) {
+        async function createProgramBlock(p) {
             console.log("A program:", p); // Output each program as an object
 
-            var newBlockName = p.programname.toLowerCase().replaceAll(/[^a-z0-9-]/gi, "-").trim(); // Turn the program name into an acceptable system name
+            const newBlockName = p.programname.toLowerCase().replaceAll(/[^a-z0-9-]/gi, "-").trim(); // Turn the program name into an acceptable system name
 
-            // First copy the block using the base asset ID and folder path defined above
-            copyAsset({
-                type: "block",
-                id: baseAssetID,
-                copyParameters: {
-                    newName: newBlockName,
-                    destinationContainerIdentifier: {
-                        type: "folder",
-                        path: {
-                            path: programFolderPath,
-                            siteName: siteName,
+            try {
+                // First copy the block using the base asset ID and folder path defined above
+                let result = await copyAsset({
+                    type: "block",
+                    id: baseAssetID,
+                    copyParameters: {
+                        newName: newBlockName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: programFolderPath,
+                                siteName: siteName,
+                            }
                         }
                     }
-                }
-            }).then(function (result) {
+                });
                 console.log("Copy response:", result);
                 document.getElementById("results").value += "✓ Created program block: " + newBlockName + "\n"; // Log success message on page
+
                 // Then read the copied asset - The copy operation does NOT return a new asset ID, so to read the copy, we use the same global vars we used to create it
-                readAsset({
+                result = await readAsset({
                     type: "block",
                     path: programFolderPath + "/" + newBlockName,
                     siteName: siteName,
-                }).then(function (result) {
-                    console.log("Read response:", result);
-                    editProgramBlock(result, p, newBlockName);
-                }).catch(function (error) {
-                    console.log("Read error:", error);
                 });
-            }).catch(function (error) {
-                console.log("Copy error:", error);
-            });
+                console.log("Read response:", result);
+                await editProgramBlock(result, p, newBlockName);
+            } catch (error) {
+                console.log(error);
+            }
         }
 
-        function editProgramBlock(result, p, newBlockName) {
-            var program = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes;
+        async function editProgramBlock(result, p, newBlockName) {
+            const program = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes;
 
             // Look at your program object in the console log (follow the path above), and fill in the data from the CSV
             // The first 2 are done for you
@@ -107,21 +106,22 @@
             /* Step 1: Fill in the rest of the program data here - program name, description, department, and degree types */
 
 
-            
+
 
             // Hint: For Degree Type, read a program block that already has some degrees selected to see what format Cascade expects for multiselects
 
 
             /* End program data fill in */
 
-            editAsset({ // Using the edit function, we send the edited object to Cascade
-                asset: result.apiReturn,
-            }).then(function (result) {
-                console.log("Edit response:", result);
+            try {
+                const editResult = await editAsset({ // Using the edit function, we send the edited object to Cascade
+                    asset: result.apiReturn,
+                });
+                console.log("Edit response:", editResult);
                 document.getElementById("results").value += "✓ Edited program block: " + newBlockName + "\n"; // Log success message on page
-            }).catch(function (error) {
+            } catch (error) {
                 console.log("Edit error:", error);
-            });
+            }
         }
     </script>
 </body>
@@ -178,55 +178,55 @@
 <!-- ANSWER KEY
 
 
-    function createProgramBlock(p) {
+    async function createProgramBlock(p) {
         console.log("Program data", p); // Output each program as an object
 
-        var newBlockName = p.programname.toLowerCase().replaceAll(/[^a-z0-9-]/gi, "-").trim(); // Turn the program name into an acceptable system name
+        const newBlockName = p.programname.toLowerCase().replaceAll(/[^a-z0-9-]/gi, "-").trim(); // Turn the program name into an acceptable system name
 
         // Extra practice
-        readAsset({
-            type: "block",
-            path: programFolderPath + "/" + newBlockName,
-            siteName: siteName,
-        }).then(function (result) {
-            editProgramBlock(result, p, newBlockName);
-        }).catch(function (error) {
-            // First copy the block using the base asset ID and folder path defined above
-            copyAsset({
+        try {
+            const result = await readAsset({
                 type: "block",
-                id: baseAssetID,
-                copyParameters: {
-                    newName: newBlockName,
-                    destinationContainerIdentifier: {
-                        type: "folder",
-                        path: {
-                            path: programFolderPath,
-                            siteName: siteName,
+                path: programFolderPath + "/" + newBlockName,
+                siteName: siteName,
+            });
+            await editProgramBlock(result, p, newBlockName);
+        } catch (error) {
+            // First copy the block using the base asset ID and folder path defined above
+            try {
+                const copyResult = await copyAsset({
+                    type: "block",
+                    id: baseAssetID,
+                    copyParameters: {
+                        newName: newBlockName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: programFolderPath,
+                                siteName: siteName,
+                            }
                         }
                     }
-                }
-            }).then(function (result) {
-                console.log("Copy response", result);
+                });
+                console.log("Copy response", copyResult);
                 document.getElementById("results").value += "✓ Created program block: " + newBlockName + "\n"; // Log success message on page
+
                 // Then read the copied asset - The copy operation does NOT return a new asset ID, so to read the copy, we use the same global vars we used to create it
-                readAsset({
+                const readResult = await readAsset({
                     type: "block",
                     path: programFolderPath + "/" + newBlockName,
                     siteName: siteName,
-                }).then(function (result) {
-                    console.log("Program block", result);
-                    editProgramBlock(result, p, newBlockName);
-                }).catch(function (error) {
-                    console.log(error);
                 });
-            }).catch(function (error) {
+                console.log("Program block", readResult);
+                await editProgramBlock(readResult, p, newBlockName);
+            } catch (error) {
                 console.log(error);
-            });
-        });
+            }
+        }
     }
 
-    function editProgramBlock(result, p, newBlockName) {
-        var program = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes;
+    async function editProgramBlock(result, p, newBlockName) {
+        const program = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes;
 
         program[0].filePath = p.img; // image // Note: if the file cannot be found, the operation will return an error and not complete
         program[1].text = p.alt; // alt
@@ -234,17 +234,18 @@
         program[3].text = p.description; // description
         program[4].text = p.department; // department
 
-        var degrees = p.degree.split('; ').map(d => d.trim()).join('::CONTENT-XML-SELECTOR::');
+        const degrees = p.degree.split('; ').map(d => d.trim()).join('::CONTENT-XML-SELECTOR::');
         program[5].text = '::CONTENT-XML-SELECTOR::' + degrees;
 
-        editAsset({ // Using the edit function, we send the edited object to Cascade
-            asset: result.apiReturn,
-        }).then(function (result) {
-            console.log("Edit response", result);
+        try {
+            const editResult = await editAsset({ // Using the edit function, we send the edited object to Cascade
+                asset: result.apiReturn,
+            });
+            console.log("Edit response", editResult);
             document.getElementById("results").value += "✓ Edited program block: " + newBlockName + "\n"; // Log success message on page
-        }).catch(function (error) {
+        } catch (error) {
             console.log(error);
-        });
+        }
     }
 
 

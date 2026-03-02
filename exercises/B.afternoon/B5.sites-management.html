@@ -27,7 +27,7 @@
         /* Exercise B5: A tool to help you make sweeping changes across all your sites! */
 
         /* Step 1: Output the site name for the <select> option text and value (lines 49-50) */
-        /* Step 2: Fill in the missing schedulePublishing fields (lines 82-96) 
+        /* Step 2: Fill in the missing schedulePublishing fields (lines 82-96)
                    Hint: Fill out the information you desire in your site publish scheduling, then look at the read response to figure out what to fill in */
         /* Step 2: Fill in the missing copyAssetFactory fields (lines 153-162)
                    Hint: You may have to check entityTypeString in the documentation to find the right types! */
@@ -35,29 +35,32 @@
         /* Step 4: Check if your AF copied successfully, and if the scheduled publishing settings updated in Cascade! */
         /* Bonus Exercise: Check if AF already exists before copying */
         /* Additional Improvements: Create a field to enter the asset factory ID and replace the hardcoded value with what is in the text field
-                                    Create a field to fill in the days/time to schedule the publishing 
+                                    Create a field to fill in the days/time to schedule the publishing
                                     Update to use "Publish to selected Destinations */
 
-        var sitesSelect = document.getElementById("sites");
-        var results = document.getElementById("messages");
+        const sitesSelect = document.getElementById("sites");
+        const results = document.getElementById("messages");
 
-        listSites({}).then(function (result) {
-            console.log("List Sites response:", result);
-            var sites = result.apiReturn.sites;
-            sites.forEach(function (site) { // Loop over the sites
-                var option = document.createElement("option");
-                option.text = site.path.path; // Step 1: fill in
-                option.value = site.path.path; // Step 1: fill in
-                sitesSelect.add(option);
-            });
-            results.innerHTML += "<p>✓ " + sitesSelect.options.length + " site(s) loaded!</p>";
-        }).catch(function (error) {
-            console.log("List sites error:", error);
-        });
+        (async () => {
+            try {
+                const result = await listSites({});
+                console.log("List Sites response:", result);
+                const sites = result.apiReturn.sites;
+                for (const site of sites) { // Loop over the sites
+                    const option = document.createElement("option");
+                    option.text = site.path.path; // Step 1: fill in
+                    option.value = site.path.path; // Step 1: fill in
+                    sitesSelect.add(option);
+                }
+                results.innerHTML += "<p>✓ " + sitesSelect.options.length + " site(s) loaded!</p>";
+            } catch (error) {
+                console.log("List sites error:", error);
+            }
+        })();
 
         function getSelectedSites() {
-            var selectedSites = [];
-            for (var i = 0; i < sitesSelect.options.length; i++) {
+            const selectedSites = [];
+            for (let i = 0; i < sitesSelect.options.length; i++) {
                 if (sitesSelect.options[i].selected) {
                     selectedSites.push(sitesSelect.options[i].value);
                 }
@@ -68,23 +71,25 @@
             return selectedSites;
         }
 
-        function schedulePublishing(enablePublishing) {
-            var publishDays = ["Monday", "Saturday"]; // The days to publish on
-            var baseTime = "00:00:00.000-05:00"; // The time to start publishing at
+        async function schedulePublishing(enablePublishing) {
+            const publishDays = ["Monday", "Saturday"]; // The days to publish on
+            const baseTime = "00:00:00.000-05:00"; // The time to start publishing at
 
-            var selectedSites = getSelectedSites();
+            const selectedSites = getSelectedSites();
             if (!selectedSites.length) return;
             results.innerHTML += '<p><strong>Starting site scheduled publishing for selected sites...</strong></p>';
 
-            var completed = 0;
-            selectedSites.forEach(function (siteName, index) {
-                readAsset({ // Read the site
-                    path: "", // Step 2: fill in
-                    type: "" // Step 2: fill in
-                }).then(function (result) {
+            let completed = 0;
+            for (let index = 0; index < selectedSites.length; index++) {
+                const siteName = selectedSites[index];
+                try {
+                    const result = await readAsset({ // Read the site
+                        path: "", // Step 2: fill in
+                        type: "" // Step 2: fill in
+                    });
                     console.log("Read site response:", result);
 
-                    var site = result.apiReturn.asset.site;
+                    const site = result.apiReturn.asset.site;
 
                     site.usesScheduledPublishing = enablePublishing;
 
@@ -92,76 +97,74 @@
                         site.publishDaysOfWeek = ""; // Step 2: fill in
                         site.scheduledPublishDestinationMode = ""; // Step 2: fill in (use "Publish to all enabled Destinations" option)
 
-                        var publishTime = addMinutesToTime(baseTime, index * 10); // Stagger publish times by 10 minutes to avoid overloading the system with all sites publishing at once
+                        const publishTime = addMinutesToTime(baseTime, index * 10); // Stagger publish times by 10 minutes to avoid overloading the system with all sites publishing at once
                         site.timeToPublish = ""; // Step 2: fill in
                     }
 
-                    editAsset({ // Edit the site
+                    const editResult = await editAsset({ // Edit the site
                         asset: result.apiReturn
-                    }).then(function (result) {
-                        results.innerHTML += '<p>Scheduled publishing ' + (enablePublishing ? 'enabled' : 'disabled') + ' for ' + siteName + (enablePublishing ? ' at ' + publishTime : '') + '</p>';
-                        completed++;
-                        if (completed === selectedSites.length) {
-                            results.innerHTML += '<p><strong>✓ Done updating scheduled publishing for all selected sites.</strong></p>';
-                        }
-                    }).catch(function (error) {
-                        console.log("Edit site error:", error);
                     });
-                }).catch(function (error) {
-                    console.log("Read site error:", error);
-                });
-            });
+                    results.innerHTML += '<p>Scheduled publishing ' + (enablePublishing ? 'enabled' : 'disabled') + ' for ' + siteName + (enablePublishing ? ' at ' + publishTime : '') + '</p>';
+                    completed++;
+                    if (completed === selectedSites.length) {
+                        results.innerHTML += '<p><strong>✓ Done updating scheduled publishing for all selected sites.</strong></p>';
+                    }
+                } catch (error) {
+                    console.log("Site error:", error);
+                }
+            }
         }
 
         // Calculate new time for each publish
         function addMinutesToTime(timeStr, minutesToAdd) {
             // timeStr: "HH:mm:ss.SSS-05:00"
-            var timePart = timeStr.split("-")[0];
-            var tzPart = "-" + timeStr.split("-")[1];
-            var parts = timePart.split(":");
-            var hour = parseInt(parts[0], 10);
-            var min = parseInt(parts[1], 10);
-            var secMs = parts[2];
+            const timePart = timeStr.split("-")[0];
+            const tzPart = "-" + timeStr.split("-")[1];
+            const parts = timePart.split(":");
+            let hour = parseInt(parts[0], 10);
+            let min = parseInt(parts[1], 10);
+            const secMs = parts[2];
             min += minutesToAdd;
             while (min >= 60) { min -= 60; hour += 1; }
             while (hour >= 24) { hour -= 24; }
-            var newTime = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + secMs + tzPart;
+            const newTime = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + secMs + tzPart;
             return newTime;
         }
 
-        function copyAssetFactory() {
-            var assetFactoryPath = "Buttons";
+        async function copyAssetFactory() {
+            const assetFactoryPath = "Buttons";
 
-            var selectedSites = getSelectedSites();
+            const selectedSites = getSelectedSites();
             if (!selectedSites.length) return;
             results.innerHTML += '<p><strong>Starting Asset Factory copy to selected sites...</strong></p>';
 
-            var completed = 0;
-            selectedSites.forEach(function (siteName) {
-                copyAsset({
-                    path: "", // Step 3: fill in
-                    siteName: "CUC26 Web Services Essentials Workshop - Presentation",
-                    type: "", // Step 3: fill in
-                    copyParameters: {
-                        destinationContainerIdentifier: { // This is the location you are copying to
-                            path: {
-                                path: "/",
-                                siteName: siteName
+            let completed = 0;
+            for (const siteName of selectedSites) {
+                try {
+                    const result = await copyAsset({
+                        path: "", // Step 3: fill in
+                        siteName: "CUC26 Web Services Essentials Workshop - Presentation",
+                        type: "", // Step 3: fill in
+                        copyParameters: {
+                            destinationContainerIdentifier: { // This is the location you are copying to
+                                path: {
+                                    path: "/",
+                                    siteName: siteName
+                                },
+                                type: "" // Step 3: fill in
                             },
-                            type: "" // Step 3: fill in
-                        },
-                        "newName": assetFactoryPath
-                    }
-                }).then(function (result) {
+                            "newName": assetFactoryPath
+                        }
+                    });
                     results.innerHTML += '<p>Asset Factory copied to ' + siteName + '</p>';
                     completed++;
                     if (completed === selectedSites.length) {
                         results.innerHTML += '<p><strong>✓ Done copying Asset Factory to all selected sites.</strong></p>';
                     }
-                }).catch(function (error) {
+                } catch (error) {
                     console.log("Copy error:", error);
-                });
-            });
+                }
+            }
         }
     </script>
 </body>
@@ -218,23 +221,25 @@
 <!-- ANSWER KEY
 
 
-    function schedulePublishing(enablePublishing) {
-        var publishDays = ["Monday", "Saturday"];
-        var baseTime = "00:00:00.000-05:00"; // 12:00am ET
+    async function schedulePublishing(enablePublishing) {
+        const publishDays = ["Monday", "Saturday"];
+        const baseTime = "00:00:00.000-05:00"; // 12:00am ET
 
-        var selectedSites = getSelectedSites();
+        const selectedSites = getSelectedSites();
         if (!selectedSites.length) return;
         results.innerHTML += '<p><strong>Starting site scheduled publishing for selected sites...</strong></p>';
 
-        var completed = 0;
-        selectedSites.forEach(function (siteName, idx) {
-            readAsset({ // Read the site
-                path: siteName,
-                type: "site"
-            }).then(function (result) {
+        let completed = 0;
+        for (let idx = 0; idx < selectedSites.length; idx++) {
+            const siteName = selectedSites[idx];
+            try {
+                const result = await readAsset({ // Read the site
+                    path: siteName,
+                    type: "site"
+                });
                 console.log("Read site response:", result);
 
-                var site = result.apiReturn.asset.site;
+                const site = result.apiReturn.asset.site;
 
                 site.usesScheduledPublishing = enablePublishing;
 
@@ -242,73 +247,72 @@
                     site.publishDaysOfWeek = publishDays;
                     site.scheduledPublishDestinationMode = "all-destinations";
 
-                    var publishTime = addMinutesToTime(baseTime, idx * 10); // Stagger publish times by 10 minutes to avoid overloading the system with all sites publishing at once
+                    const publishTime = addMinutesToTime(baseTime, idx * 10); // Stagger publish times by 10 minutes to avoid overloading the system with all sites publishing at once
                     site.timeToPublish = publishTime;
                 }
 
-                editAsset({
+                const editResult = await editAsset({
                     asset: result.apiReturn
-                }).then(function (result) {
-                    results.innerHTML += '<p>Scheduled publishing ' + (enablePublishing ? 'enabled' : 'disabled') + ' for ' + siteName + (enablePublishing ? ' at ' + publishTime : '') + '</p>';
-                    completed++;
-                    if (completed === selectedSites.length) {
-                        results.innerHTML += '<p><strong>✓ Done updating scheduled publishing for all selected sites.</strong></p>';
-                    }
-                }).catch(function (error) {
-                    console.log("Edit site error:", error);
                 });
-            }).catch(function (error) {
-                console.log("Read site error:", error);
-            });
-        });
+                results.innerHTML += '<p>Scheduled publishing ' + (enablePublishing ? 'enabled' : 'disabled') + ' for ' + siteName + (enablePublishing ? ' at ' + publishTime : '') + '</p>';
+                completed++;
+                if (completed === selectedSites.length) {
+                    results.innerHTML += '<p><strong>✓ Done updating scheduled publishing for all selected sites.</strong></p>';
+                }
+            } catch (error) {
+                console.log("Site error:", error);
+            }
+        }
     }
 
 
-    function copyAssetFactory() {
-        var assetFactoryPath = "Buttons";
+    async function copyAssetFactory() {
+        const assetFactoryPath = "Buttons";
 
-        var selectedSites = getSelectedSites();
+        const selectedSites = getSelectedSites();
         if (!selectedSites.length) return;
         results.innerHTML += '<p><strong>Starting Asset Factory copy to selected sites...</strong></p>';
 
-        var completed = 0;
-        selectedSites.forEach(function (siteName) {
-            readAsset({ // Check if AF already exists
-                path: assetFactoryPath,
-                siteName: siteName,
-                type: "assetfactory"
-            }).then(function (result) {
+        let completed = 0;
+        for (const siteName of selectedSites) {
+            try {
+                const result = await readAsset({ // Check if AF already exists
+                    path: assetFactoryPath,
+                    siteName: siteName,
+                    type: "assetfactory"
+                });
                 results.innerHTML += '<p>Asset Factory already exists in ' + siteName + '</p>';
                 completed++;
                 if (completed === selectedSites.length) {
                     results.innerHTML += '<p><strong>✓ Done copying Asset Factory to all selected sites.</strong></p>';
                 }
-            }).catch(function (error) { // Create AF if it doesn't exist
-                copyAsset({
-                    path: assetFactoryPath,
-                    siteName: "CUC26 Web Services Essentials Workshop - Presentation",
-                    type: "assetfactory",
-                    copyParameters: {
-                        destinationContainerIdentifier: {
-                            path: { 
-                                path: "/", 
-                                siteName: siteName
+            } catch (error) { // Create AF if it doesn't exist
+                try {
+                    const copyResult = await copyAsset({
+                        path: assetFactoryPath,
+                        siteName: "CUC26 Web Services Essentials Workshop - Presentation",
+                        type: "assetfactory",
+                        copyParameters: {
+                            destinationContainerIdentifier: {
+                                path: {
+                                    path: "/",
+                                    siteName: siteName
+                                },
+                                type: "assetfactorycontainer"
                             },
-                            type: "assetfactorycontainer"
-                        },
-                        "newName": assetFactoryPath
-                    }
-                }).then(function (result) {
+                            "newName": assetFactoryPath
+                        }
+                    });
                     results.innerHTML += '<p>Asset Factory copied to ' + siteName + '</p>';
                     completed++;
                     if (completed === selectedSites.length) {
                         results.innerHTML += '<p><strong>✓ Done copying Asset Factory to all selected sites.</strong></p>';
                     }
-                }).catch(function (error) {
+                } catch (error) {
                     console.log("Copy error:", error);
-                });
-            });
-        });
+                }
+            }
+        }
     }
 
 

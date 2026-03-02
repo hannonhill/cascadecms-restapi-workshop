@@ -25,7 +25,7 @@
         /* Step 2: Save, open file in browser, and scan site! Check the console for any errors */
         /* Bonus Exercise: Output the number of linked and static (manual) relationships separately. */
 
-        var results = document.getElementById("messages");
+        const results = document.getElementById("messages");
 
         async function scanSite() {
             results.innerHTML += "<p><strong>Scanning " + siteName + "</strong></p>";
@@ -33,41 +33,55 @@
             results.innerHTML += "<p><strong>✓ Done scanning " + siteName + "</strong></p>";
         }
 
-        function loopFolder(path, site) {
-            return readAsset({
-                type: "folder",
-                path: path,
-                siteName: site
-            }).then(function (result) {
-                var folderChildren = result.apiReturn.asset.folder.children;
-                // Collect all promises for children
-                var childPromises = folderChildren.map(function (child) {
-                    if (child.type === "folder") {
-                        console.log("Looping folder:", child.path.path);
-                        // Return the recursive promise
-                        return loopFolder(child.path.path, site);
-                    } else {
-                        // Return the promise for relationships
-                        return relationships({
+        async function loopFolder(path, site) {
+            let result;
+            try {
+                result = await readAsset({
+                    type: "folder",
+                    path: path,
+                    siteName: site
+                });
+            } catch (error) {
+                console.log(error);
+                return;
+            }
+
+            const folderChildren = result.apiReturn.asset.folder.children;
+            // Process children one at a time
+            for (const child of folderChildren) {
+                if (child.type === "folder") {
+                    console.log("Looping folder:", child.path.path);
+                    await loopFolder(child.path.path, site);
+                } else {
+                    try {
+                        const relResult = await relationships({
                             id: child.id,
                             type: child.type,
-                        }).then(function (result) {
-                            console.log("Relationships response:", result);
-
-                            var numberOfRelationships = ""; // Step 1: fill in
-
-                            var style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
-                            results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
-                        }).catch(function (error) {
-                            console.log("Relationships error:", error);
                         });
+                        console.log("Relationships response:", relResult);
+
+                        const numberOfRelationships = relResult.apiReturn.relationships.length; // Step 1: fill in
+
+                        const style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
+                        results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
+
+                        if (numberOfRelationships > 0) {
+                            let linked = 0;
+                            let staticCount = 0;
+                            relResult.apiReturn.relationships.forEach(element => {
+                                if (element.relationshipType.includes("LINKED")) {
+                                    linked++;
+                                } else if (element.relationshipType.includes("STATIC")) {
+                                    staticCount++;
+                                }
+                            });
+                            results.innerHTML += "<p style='margin-left: 20px;'>" + linked + " linked, " + staticCount + " static</p>";
+                        }
+                    } catch (error) {
+                        console.log("Relationships error:", error);
                     }
-                });
-                // Wait for all children to finish
-                return Promise.all(childPromises);
-            }).catch(function (error) {
-                console.log(error);
-            });
+                }
+            }
         }
     </script>
 </body>
@@ -124,54 +138,55 @@
 <!-- ANSWER KEY
 
 
-    function loopFolder(path, site) {
-        return readAsset({
-            type: "folder",
-            path: path,
-            siteName: site
-        }).then(function (result) {
-            var folderChildren = result.apiReturn.asset.folder.children;
-            // Collect all promises for children
-            var childPromises = folderChildren.map(function (child) {
-                if (child.type === "folder") {
-                    console.log("Looping folder:", child.path.path);
-                    // Return the recursive promise
-                    return loopFolder(child.path.path, site);
-                } else {
-                    // Return the promise for relationships
-                    return relationships({
+    async function loopFolder(path, site) {
+        let result;
+        try {
+            result = await readAsset({
+                type: "folder",
+                path: path,
+                siteName: site
+            });
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+
+        const folderChildren = result.apiReturn.asset.folder.children;
+        // Process children one at a time
+        for (const child of folderChildren) {
+            if (child.type === "folder") {
+                console.log("Looping folder:", child.path.path);
+                await loopFolder(child.path.path, site);
+            } else {
+                try {
+                    const relResult = await relationships({
                         id: child.id,
                         type: child.type,
-                    }).then(function (result) {
-                        console.log("Relationships response:", result);
-
-                        var numberOfRelationships = result.apiReturn.relationships.length; // Step 1: fill in
-
-                        var style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
-                        results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
-
-                        if (numberOfRelationships > 0) {
-                            var linked = 0;
-                            var static = 0;
-                            result.apiReturn.relationships.forEach(element => {
-                                if (element.relationshipType.includes("LINKED")) {
-                                    linked++;
-                                } else if (element.relationshipType.includes("STATIC")) {
-                                    static++;
-                                }
-                            });
-                            results.innerHTML += "<p style='margin-left: 20px;'>" + linked + " linked, " + static + " static</p>";
-                        }
-                    }).catch(function (error) {
-                        console.log("Relationships error:", error);
                     });
+                    console.log("Relationships response:", relResult);
+
+                    const numberOfRelationships = relResult.apiReturn.relationships.length; // Step 1: fill in
+
+                    const style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
+                    results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
+
+                    if (numberOfRelationships > 0) {
+                        let linked = 0;
+                        let staticCount = 0;
+                        relResult.apiReturn.relationships.forEach(element => {
+                            if (element.relationshipType.includes("LINKED")) {
+                                linked++;
+                            } else if (element.relationshipType.includes("STATIC")) {
+                                staticCount++;
+                            }
+                        });
+                        results.innerHTML += "<p style='margin-left: 20px;'>" + linked + " linked, " + staticCount + " static</p>";
+                    }
+                } catch (error) {
+                    console.log("Relationships error:", error);
                 }
-            });
-            // Wait for all children to finish
-            return Promise.all(childPromises);
-        }).catch(function (error) {
-            console.log(error);
-        });
+            }
+        }
     }
 
 

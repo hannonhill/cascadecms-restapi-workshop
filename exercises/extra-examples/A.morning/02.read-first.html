@@ -20,19 +20,22 @@
             Step 1.3: Write a copy operation on line 30 that creates a new program in the /_blocks/programs folder
             Step 1.4: Once that is successful, comment out or remove your copy operation and write a delete operation that removes the same program you just created
         */
-        readAsset({
-            type: "", //fill in
-            id: "", //fill in
-        }).then(function (result) {
-            if (result.apiReturn.success) {
-                console.log(result);
-                // write a copy asset operation here
+        (async () => {
+            try {
+                const result = await readAsset({
+                    type: "", //fill in
+                    id: "", //fill in
+                });
+                if (result.apiReturn.success) {
+                    console.log(result);
+                    // write a copy asset operation here
 
-                // write a delete asset operation here
+                    // write a delete asset operation here
+                }
+            } catch (error) {
+                console.log(error);
             }
-        }).catch(function (error) {
-            console.log(error);
-        });
+        })();
 
     </script>
     <h1>

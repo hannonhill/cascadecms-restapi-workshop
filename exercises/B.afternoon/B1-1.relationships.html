@@ -24,18 +24,21 @@
             listing the relationships of a block will give you blocks/pages where that block is attached
             listing the relationships of a file will give you blocks/pages where that file is attached/linked  */
 
-        relationships({
-            id: "", // Step 1: fill in
-            type: "", // Step 2: fill in
-        }).then(function (result) {
-            console.log("Relationships response:", result);
+        (async () => {
+            try {
+                const result = await relationships({
+                    id: "", // Step 1: fill in
+                    type: "", // Step 2: fill in
+                });
+                console.log("Relationships response:", result);
 
-            // You can see all relationships created through linking by using dot notation to drill down to the relationships array
-            console.log("Relationships:", ); // Step 3: fill in
+                // You can see all relationships created through linking by using dot notation to drill down to the relationships array
+                console.log("Relationships:", ); // Step 3: fill in
 
-        }).catch(function (error) {
-            console.log(error);
-        });
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     </script>
     
     <h1>Exercise B1-1: Relationships</h1>
@@ -93,18 +96,21 @@
 <!-- ANSWER KEY
 
 
-    relationships({
-        id: "8c33bd5e0a0000d54fbffbc6d041616d", // Step 1: fill in
-        type: "page", // Step 2: fill in
-    }).then(function (result) {
-        console.log("Relationships response:", result);
+    (async () => {
+        try {
+            const result = await relationships({
+                id: "8c33bd5e0a0000d54fbffbc6d041616d", // Step 1: fill in
+                type: "page", // Step 2: fill in
+            });
+            console.log("Relationships response:", result);
 
-        // You can see all relationships created through linking by using dot notation to drill down to the relationships array
-        console.log("Relationships:", result.apiReturn.relationships); // Step 3: fill in
+            // You can see all relationships created through linking by using dot notation to drill down to the relationships array
+            console.log("Relationships:", result.apiReturn.relationships); // Step 3: fill in
 
-    }).catch(function (error) {
-        console.log(error);
-    });
+        } catch (error) {
+            console.log(error);
+        }
+    })();
 
 
 -->

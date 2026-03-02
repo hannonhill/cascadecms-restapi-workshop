@@ -12,26 +12,28 @@
         /* Note: Bonus script - This script automates the creation of Cascade users by reading in list from CSV file (/csv/users.csv),
           creating individual sites and updating site access for each user.  */
 
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
         // createUsers();
 
         // createSites();
 
         // updateSiteAccess();
 
-        function createUsers() {
+        async function createUsers() {
             Papa.parse('csv/users.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function (h) {
+                transformHeader: (h) => {
                     return h.toLowerCase().replace(/[\W_]+/g, "").trim();
                 },
-                complete: function (result) {
+                complete: async (result) => {
                     console.log(result);
-                    result.data.forEach(function (user, i) {
-                        setTimeout(function () {
+                    for (const user of result.data) {
+                        try {
                             console.log(user);
-                            createAsset({
+                            const createResult = await createAsset({
                                 asset: {
                                     user: {
                                         authType: "normal",
@@ -44,78 +46,76 @@
                                         username: user.email.toLowerCase(),
                                     }
                                 }
-                            }).then(function (result) {
-                                console.log(result);
-                            }).catch(function (error) {
-                                console.log(error);
                             });
-                        }, i * 400);
-                    });
-                }
-            });
-        }
-
-        function createSites() {
-            Papa.parse('csv/users.csv', {
-                header: true,
-                download: true,
-                skipEmptyLines: true,
-                transformHeader: function (h) {
-                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
-                },
-                complete: function (result) {
-                    console.log(result);
-                    result.data.forEach(function (user) {
-                        console.log(user);
-                        copySite({
-                            originalSiteName: "_WS-Master",
-                            newSiteName: "WS-" + user.lastname
-                        }).then(function (result) {
-                            console.log(result);
-                        }).catch(function (error) {
+                            console.log(createResult);
+                        } catch (error) {
                             console.log(error);
-                        });
-                    });
+                        }
+                        await sleep(400);
+                    }
                 }
             });
         }
 
-        function updateSiteAccess() {
+        async function createSites() {
             Papa.parse('csv/users.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function (h) {
+                transformHeader: (h) => {
                     return h.toLowerCase().replace(/[\W_]+/g, "").trim();
                 },
-                complete: function (result) {
+                complete: async (result) => {
                     console.log(result);
-                    result.data.forEach(function (user) {
-                        console.log(user);
-                        readAsset({
-                            type: "site",
-                            siteName: "%2520", // have to double escape the site name to read Site by name instead of ID
-                            path: "WS-" + user.lastname
-                        }).then(function (result) {
-                            console.log(result);
-                            result.apiReturn.asset.site.roleAssignments = [{
+                    for (const user of result.data) {
+                        try {
+                            console.log(user);
+                            const copyResult = await copySite({
+                                originalSiteName: "_WS-Master",
+                                newSiteName: "WS-" + user.lastname
+                            });
+                            console.log(copyResult);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                }
+            });
+        }
+
+        async function updateSiteAccess() {
+            Papa.parse('csv/users.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: (h) => {
+                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
+                },
+                complete: async (result) => {
+                    console.log(result);
+                    for (const user of result.data) {
+                        try {
+                            console.log(user);
+                            const readResult = await readAsset({
+                                type: "site",
+                                siteName: "%2520", // have to double escape the site name to read Site by name instead of ID
+                                path: "WS-" + user.lastname
+                            });
+                            console.log(readResult);
+                            readResult.apiReturn.asset.site.roleAssignments = [{
                                 "roleId": "8",
                                 "roleName": "Site Administrator",
                                 "users": user.email.toLowerCase(),
                             }]
 
-                            editAsset({
-                                asset: result.apiReturn,
-                            }).then(function (result) {
-                                console.log(result);
-                            }).catch(function (error) {
-                                console.log(error);
+                            const editResult = await editAsset({
+                                asset: readResult.apiReturn,
                             });
-
-                        }).catch(function (error) {
+                            console.log(editResult);
+                        } catch (error) {
                             console.log(error);
-                        });
-                    });
+                        }
+                    }
                 }
             });
         }

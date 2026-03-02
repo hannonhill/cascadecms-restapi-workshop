@@ -24,35 +24,38 @@
         /* Bonus Exercise: Modify some additional content, like the first content row WYSIWYG content or banner image */
         /* Note: Don't forget that copying again with the same name will append a number to the system name */
 
-        var assetType = "page";
-        var baseAssetID = ""; // Step 1: fill in
-        var newName = ""; // Step 2: fill in
-        var newFolderPath = ""; // Step 3: fill in
-        var newFolderSiteName = siteName; // Set in cascade-restapi.js
+        const assetType = "page";
+        const baseAssetID = ""; // Step 1: fill in
+        const newName = ""; // Step 2: fill in
+        const newFolderPath = ""; // Step 3: fill in
+        const newFolderSiteName = siteName; // Set in cascade-restapi.js
 
         // First copy the base asset using the variables above
-        copyAsset({
-            type: assetType,
-            id: baseAssetID,
-            copyParameters: {
-                newName: newName,
-                destinationContainerIdentifier: {
-                    type: "folder",
-                    path: {
-                        path: newFolderPath,
-                        siteName: newFolderSiteName
+        (async () => {
+            try {
+                let result = await copyAsset({
+                    type: assetType,
+                    id: baseAssetID,
+                    copyParameters: {
+                        newName: newName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: newFolderPath,
+                                siteName: newFolderSiteName
+                            }
+                        }
                     }
-                }
-            }
-        }).then(function (result) {
-            console.log("Copy response:", result);
-            // Then read the page we just copied to make sure we have all of the content for editing
-            readAsset({
-                type: assetType,
-                path: newFolderPath + "/" + newName,
-                siteName: newFolderSiteName,
-                // Note: The copy operation does NOT return a new asset ID so we use the same global vars that we used to create the copy to read the copy
-            }).then(function (result) {
+                });
+                console.log("Copy response:", result);
+
+                // Then read the page we just copied to make sure we have all of the content for editing
+                result = await readAsset({
+                    type: assetType,
+                    path: newFolderPath + "/" + newName,
+                    siteName: newFolderSiteName,
+                    // Note: The copy operation does NOT return a new asset ID so we use the same global vars that we used to create the copy to read the copy
+                });
                 console.log("Read response:", result);
                 // Make any modifications to the page
 
@@ -62,19 +65,14 @@
 
 
                 // The modified asset is submitted to Cascade with an edit
-                editAsset({
+                const editResult = await editAsset({
                     asset: result.apiReturn,
-                }).then(function (result) {
-                    console.log("Edit response:", result);
-                }).catch(function (error) {
-                    console.log("Edit error:", error);
                 });
-            }).catch(function (error) {
-                console.log("Read error:", error);
-            });
-        }).catch(function (error) {
-            console.log("Copy error:", error);
-        });
+                console.log("Edit response:", editResult);
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     </script>
 
     <h1>Exercise B2-2: Create from Base Asset</h1>
@@ -133,40 +131,43 @@
 <!-- ANSWER KEY
 
 
-        var assetType = "page";
-        var baseAssetID = "8c33bca80a0000d54fbffbc65a6e61d3";
-        var newName = "new-page";
-        var newFolderPath = "/";
-        var newFolderSiteName = siteName; // Set in cascade-restapi.js
+        const assetType = "page";
+        const baseAssetID = "8c33bca80a0000d54fbffbc65a6e61d3";
+        const newName = "new-page";
+        const newFolderPath = "/";
+        const newFolderSiteName = siteName; // Set in cascade-restapi.js
 
         // First copy the base asset using the variables above
-        copyAsset({
-            type: assetType,
-            id: baseAssetID,
-            copyParameters: {
-                newName: newName,
-                destinationContainerIdentifier: {
-                    type: "folder",
-                    path: {
-                        path: newFolderPath,
-                        siteName: newFolderSiteName
+        (async () => {
+            try {
+                let result = await copyAsset({
+                    type: assetType,
+                    id: baseAssetID,
+                    copyParameters: {
+                        newName: newName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: newFolderPath,
+                                siteName: newFolderSiteName
+                            }
+                        }
                     }
-                }
-            }
-        }).then(function (result) {
-            console.log("Copy response:", result);
-            // Then read the page we just copied to make sure we have all of the content for editing
-            readAsset({
-                type: assetType,
-                path: newFolderPath + "/" + newName,
-                siteName: newFolderSiteName,
-                // Note: The copy operation does NOT return a new asset ID so we use the same global vars that we used to create the copy to read the copy
-                /*
-                // Another option is to use the parameters we passed in from result:
-                // path: result.sent.copyParameters.destinationContainerIdentifier.path.path + "/" + result.sent.copyParameters.newName,
-                // siteName: result.sent.copyParameters.destinationContainerIdentifier.path.siteName,
-                */
-            }).then(function (result) {
+                });
+                console.log("Copy response:", result);
+
+                // Then read the page we just copied to make sure we have all of the content for editing
+                result = await readAsset({
+                    type: assetType,
+                    path: newFolderPath + "/" + newName,
+                    siteName: newFolderSiteName,
+                    // Note: The copy operation does NOT return a new asset ID so we use the same global vars that we used to create the copy to read the copy
+                    /*
+                    // Another option is to use the parameters we passed in from result:
+                    // path: result.sent.copyParameters.destinationContainerIdentifier.path.path + "/" + result.sent.copyParameters.newName,
+                    // siteName: result.sent.copyParameters.destinationContainerIdentifier.path.siteName,
+                    */
+                });
                 console.log("Read response:", result);
                 // Make any modifications to the page
 
@@ -177,19 +178,14 @@
                 result.apiReturn.asset.page.structuredData.structuredDataNodes[1].structuredDataNodes[1].text = "Hello World!";
 
                 // The modified asset is submitted to Cascade with an edit
-                editAsset({
+                const editResult = await editAsset({
                     asset: result.apiReturn,
-                }).then(function (result) {
-                    console.log("Edit response:", result);
-                }).catch(function (error) {
-                    console.log("Edit error:", error);
                 });
-            }).catch(function (error) {
-                console.log("Read error:", error);
-            });
-        }).catch(function (error) {
-            console.log("Copy error:", error);
-        });
+                console.log("Edit response:", editResult);
+            } catch (error) {
+                console.log(error);
+            }
+        })();
 
 
 -->
