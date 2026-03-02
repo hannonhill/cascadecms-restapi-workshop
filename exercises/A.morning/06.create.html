@@ -7,13 +7,13 @@
 </head>
 
 <body>
+    <script src="../../creds.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
         /* Note: asset creation requires very specific information
                         most of the time it's easier and faster to make a copy of an asset and edit it.
                         Very similar to how the system creates new assets from base assets. Create from
                         base asset will be further reviewed in chained operations section of the workshop */
-
 
         /* Exercise 1: Create a folder using parent folder ID and site name  */
 
@@ -27,10 +27,9 @@
         createAsset({
             asset: {
                 folder: {
-                    name: "new-folder", // fill in
-                    parentFolderPath: "_exercise-3", // fill in
-                    siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
-                    metadataSetId: "8c36425e0a0000d54fbffbc63fb66599"
+                    name: "", // fill in
+                    parentFolderPath: "", // fill in
+                    siteName: "", // fill in
                 }
             }
         }).then(function (result) {
