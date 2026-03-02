@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <title>Exercise B1-1: Relationships</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../creds.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+</head>
+
+<body>
+    <script>
+        /* Exercise B1-1: Output the relationships of an asset using asset ID  */
+
+        /* Step 1: Add the ID of an asset (line 28) */
+        /* Step 2: Add the type of the asset (line 29) */
+        /* Step 3: Get the relationships array from the results (line 34). Hint: Check the reslationships response in the console! */
+        /* Step 4: Save, open file in browser, view console log */
+        /* Bonus Exercise: Attach a manual relationship to the asset in Cascade, refresh browser, see the static relationship type in the console log */
+
+        /* Note: Think of relationships as any place the asset is in use
+            listing the relationships of a content type will give you pages
+            listing the relationships of a page will give you blocks/pages where that page is attached/linked 
+            listing the relationships of a block will give you blocks/pages where that block is attached
+            listing the relationships of a file will give you blocks/pages where that file is attached/linked  */
+
+        relationships({
+            id: "", // Step 1: fill in
+            type: "", // Step 2: fill in
+        }).then(function (result) {
+            console.log("Relationships response:", result);
+
+            // You can see all relationships created through linking by using dot notation to drill down to the relationships array
+            console.log("Relationships:", ); // Step 3: fill in
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+    
+    <h1>Exercise B1-1: Relationships</h1>
+    <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ANSWER KEY
+
+
+    relationships({
+        id: "8c33bd5e0a0000d54fbffbc6d041616d", // Step 1: fill in
+        type: "page", // Step 2: fill in
+    }).then(function (result) {
+        console.log("Relationships response:", result);
+
+        // You can see all relationships created through linking by using dot notation to drill down to the relationships array
+        console.log("Relationships:", result.apiReturn.relationships); // Step 3: fill in
+
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+
+-->

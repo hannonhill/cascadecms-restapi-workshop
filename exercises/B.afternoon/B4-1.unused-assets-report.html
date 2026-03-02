@@ -21,9 +21,9 @@
     <script>
         /* Exercise B4-1: Loop over all content in a site and get the number of relationships for each asset */
 
-        /* Step 1: Add up the subscribers and the manual subscribers for each asset (line 57) */
+        /* Step 1: Get the number of relationships (line 57) */
         /* Step 2: Save, open file in browser, and scan site! Check the console for any errors */
-        /* Bonus Exercise: In the results messages, highlight the assets that have 0 relationships */
+        /* Bonus Exercise: Output the number of linked and static (manual) relationships separately. */
 
         var results = document.getElementById("messages");
 
@@ -47,19 +47,19 @@
                         // Return the recursive promise
                         return loopFolder(child.path.path, site);
                     } else {
-                        // Return the promise for listSubscribers
-                        return listSubscribers({
+                        // Return the promise for relationships
+                        return relationships({
                             id: child.id,
                             type: child.type,
                         }).then(function (result) {
-                            console.log("List Subscribers response:", result);
+                            console.log("Relationships response:", result);
 
-                            var numberOfSubscribers = ""; // Step 1: fill in
+                            var numberOfRelationships = ""; // Step 1: fill in
 
-                            results.innerHTML += "<p>" + numberOfSubscribers + " subscribers for " + child.path.path + "</p>";
-
+                            var style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
+                            results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
                         }).catch(function (error) {
-                            console.log("List subscribers error:", error);
+                            console.log("Relationships error:", error);
                         });
                     }
                 });
@@ -138,20 +138,32 @@
                     // Return the recursive promise
                     return loopFolder(child.path.path, site);
                 } else {
-                    // Return the promise for listSubscribers
-                    return listSubscribers({
+                    // Return the promise for relationships
+                    return relationships({
                         id: child.id,
                         type: child.type,
                     }).then(function (result) {
-                        console.log("List Subscribers response:", result);
+                        console.log("Relationships response:", result);
 
-                        var numberOfSubscribers = result.apiReturn.subscribers.length + result.apiReturn.manualSubscribers.length;
+                        var numberOfRelationships = result.apiReturn.relationships.length; // Step 1: fill in
 
-                        var style = numberOfSubscribers === 0 ? ' style="color: yellow;"' : '';
-                        results.innerHTML += "<p" + style + ">" + numberOfSubscribers + " subscribers for " + child.path.path + "</p>";
+                        var style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
+                        results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
 
+                        if (numberOfRelationships > 0) {
+                            var linked = 0;
+                            var static = 0;
+                            result.apiReturn.relationships.forEach(element => {
+                                if (element.relationshipType.includes("LINKED")) {
+                                    linked++;
+                                } else if (element.relationshipType.includes("STATIC")) {
+                                    static++;
+                                }
+                            });
+                            results.innerHTML += "<p style='margin-left: 20px;'>" + linked + " linked, " + static + " static</p>";
+                        }
                     }).catch(function (error) {
-                        console.log("List subscribers error:", error);
+                        console.log("Relationships error:", error);
                     });
                 }
             });
