@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <!-- <script src="../../creds.js"></script> -->
+    <script src="../../creds.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
         /* Exercise 1: Read an asset using asset ID */
@@ -54,3 +54,75 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Answer Key 
+    -- Exercise 1 --
+    readAsset({
+        type: "page",
+        id: "8c3643d10a0000d54fbffbc68375b4d2",  
+    }).then(function (result) {
+        console.log(result);
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+    -- Exercise 2 --
+    readAsset({
+        type: "block",
+        siteName: "CUC26 Web Services Essentials Workshop - Work Site", //fill in
+        path: "interior-master" // fill in
+    }).then(function (result) {
+        console.log(result);
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+-->
