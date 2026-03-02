@@ -20,13 +20,13 @@
         /* Step 1.4: Save, open file in browser, view console log */
 
         copyAsset({
-            type: "page",
-            id: "8c363d310a0000d54fbffbc604b5d2e0", // fill in
+            type: "block",
+            id: "", // fill in
             copyParameters: {
-                newName: "new-program", // fill in
+                newName: "", // fill in
                 destinationContainerIdentifier: {
                     type: "folder",
-                    id: "917ce9bc0a0000d50780423927bed193" // fill in
+                    id: "" // fill in
                 }
             }
         }).then(function (result) {
@@ -47,15 +47,15 @@
 
         // copyAsset({
         //     type: "block",
-        //     path: "", // fill in
-        //     siteName: "", // fill in
+        //     path: "_blocks/programs/accounting", // fill in
+        //     siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
         //     copyParameters: {
-        //         newName: "", // fill in
+        //         newName: "another-program", // fill in
         //         destinationContainerIdentifier: {
         //             type: "folder",
         //             path: {
-        //                 path: "", // fill in
-        //                 siteName: "", // fill in
+        //                 path: "_exercise-3", // fill in
+        //                 siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
         //             }
         //         }
         //     }
@@ -73,3 +73,91 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Answer Key 
+    -- Exercise 1 --
+    copyAsset({
+        type: "block",
+        id: "8c363d310a0000d54fbffbc604b5d2e0", // fill in
+        copyParameters: {
+            newName: "new-program", // fill in
+            destinationContainerIdentifier: {
+                type: "folder",
+                id: "917ce9bc0a0000d50780423927bed193" // fill in
+            }
+        }
+    }).then(function (result) {
+        console.log(result);
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+    -- Exercise 2 --
+    copyAsset({
+        type: "block",
+        path: "_blocks/programs/accounting", // fill in
+        siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
+        copyParameters: {
+            newName: "another-program", // fill in
+            destinationContainerIdentifier: {
+                type: "folder",
+                path: {
+                    path: "_exercise-3", // fill in
+                    siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
+                }
+            }
+        }
+    }).then(function (result) {
+        console.log(result);
+    }).catch(function (error) {
+        console.log(error);
+    });
+-->

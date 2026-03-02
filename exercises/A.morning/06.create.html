@@ -15,13 +15,11 @@
                         Very similar to how the system creates new assets from base assets. Create from
                         base asset will be further reviewed in chained operations section of the workshop */
 
-        /* Exercise 1: Create a folder using parent folder ID and site name  */
+        /* Exercise 1: Create a folder using parent folder path and site name  */
 
-        // Note: Although a folder ID is provided, a site name or ID is still required
-
-        /* Step 1.1: Add a new folder name on line 30  */
-        /* Step 1.2: Add the ID of the parent folder that you would like the new folder to be created in on line 31 */
-        /* Step 1.3: Add your site name on line 32 */
+        /* Step 1.1: Add a new folder name on line 28  */
+        /* Step 1.2: Add the ID of the parent folder that you would like the new folder to be created in on line 29 */
+        /* Step 1.3: Add your site name on line 30 */
         /* Step 1.4: Save, open file in browser, view console log */
 
         createAsset({
@@ -43,3 +41,68 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Answer Key 
+    -- Exercise 1 --
+    createAsset({
+        asset: {
+            folder: {
+                name: "new-folder", // fill in
+                parentFolderPath: "_exercise-3", // fill in
+                siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
+            }
+        }
+    }).then(function (result) {
+        console.log(result);
+    }).catch(function (error) {
+        console.log(error);
+    });
+-->
