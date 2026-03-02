@@ -13,7 +13,7 @@
         <h1>Exercise B5: Sites Management</h1>
         <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
         <h2 style="display:inline">Sites. </h2><span>Select the site(s) you'd like to update.</span><br /><br />
-        <select name="sites" id="sites" multiple="" style="resize: both; width: 90%; height: 100px;"></select><br /><br />
+        <select name="sites" id="sites" multiple="" style="resize: both; width: 90%; height: 300px;"></select><br /><br />
         <button onclick="schedulePublishing(true)">Schedule Publishing</button>
         <button onclick="schedulePublishing(false)">Disable Publishing</button>
         <button onclick="copyAssetFactory()">Copy Asset Factory</button>
@@ -113,7 +113,7 @@
             });
         }
 
-        // Calculate new time for each publish
+        // Calculates new time for each publish
         function addMinutesToTime(timeStr, minutesToAdd) {
             // timeStr: "HH:mm:ss.SSS-05:00"
             var timePart = timeStr.split("-")[0];

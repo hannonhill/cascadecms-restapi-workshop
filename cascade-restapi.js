@@ -9,7 +9,7 @@ if (typeof cmsAPI === 'undefined') { // API Key loaded from creds.js (if availab
 // Note: If you get the error "The requested asset does not exist" and you're trying to access an existing asset, please double check your API Key.
 
 /* Step 3: Update to YOUR site name */
-const siteName = "CUC26 Web Services Essentials Workshop - Work Site"; // fill in
+const siteName = "CUC26 Web Services Essentials Workshop - Antonio R"; // fill in
 
 /* Step 4: Save! */
 

@@ -12,6 +12,8 @@
         /* Note: Bonus script - This script automates the creation of Cascade users by reading in list from CSV file (/csv/users.csv),
           creating individual sites and updating site access for each user.  */
 
+          var csv = 'csv/users.csv';
+
         // createUsers();
 
         // createSites();
@@ -19,7 +21,7 @@
         // updateSiteAccess();
 
         function createUsers() {
-            Papa.parse('csv/users.csv', {
+            Papa.parse(csv, {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -35,13 +37,13 @@
                                 asset: {
                                     user: {
                                         authType: "normal",
-                                        email: user.email.toLowerCase(),
+                                        email: user.emailaddress.toLowerCase(),
                                         enabled: true,
                                         fullName: user.firstname + ' ' + user.lastname,
                                         groups: "Web Services",
-                                        password: "cuc24-webservices",
+                                        password: "cuc26-web-services",
                                         roles: "Contributor",
-                                        username: user.email.toLowerCase(),
+                                        username: user.emailaddress.toLowerCase(),
                                     }
                                 }
                             }).then(function (result) {
@@ -56,7 +58,7 @@
         }
 
         function createSites() {
-            Papa.parse('csv/users.csv', {
+            Papa.parse(csv, {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -68,8 +70,8 @@
                     result.data.forEach(function (user) {
                         console.log(user);
                         copySite({
-                            originalSiteName: "_WS-Master",
-                            newSiteName: "WS-" + user.lastname
+                            originalSiteName: "CUC26 Web Services Essentials Workshop - Work Site",
+                            newSiteName: "CUC26 Web Services Essentials Workshop - " + user.firstname + " " + user.lastname
                         }).then(function (result) {
                             console.log(result);
                         }).catch(function (error) {
@@ -81,7 +83,7 @@
         }
 
         function updateSiteAccess() {
-            Papa.parse('csv/users.csv', {
+            Papa.parse(csv, {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -95,14 +97,15 @@
                         readAsset({
                             type: "site",
                             siteName: "%2520", // have to double escape the site name to read Site by name instead of ID
-                            path: "WS-" + user.lastname
+                            path: "CUC26 Web Services Essentials Workshop - " + user.firstname + " " + user.lastname
                         }).then(function (result) {
                             console.log(result);
                             result.apiReturn.asset.site.roleAssignments = [{
                                 "roleId": "8",
                                 "roleName": "Site Administrator",
-                                "users": user.email.toLowerCase(),
+                                "users": user.emailaddress.toLowerCase(),
                             }]
+                            result.apiReturn.asset.site.url = result.apiReturn.asset.site.url.replace("work-site", user.firstname.toLowerCase() + "-" + user.lastname.toLowerCase());
 
                             editAsset({
                                 asset: result.apiReturn,
