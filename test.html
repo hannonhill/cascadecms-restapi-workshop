@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function createAsset(a) {
+            return new Promise(function (resolve, reject) {
+                fetch(cmsUrl + "api/v1/create", { method: "POST", headers: headers, body: JSON.stringify({ asset: a.asset }) })
+                    .then((r) => r.json())
+                    .then((data) => {
+                        if (data.success) {
+                            resolve({ create_status: "Success", sent: a, apiReturn: data });
+                        } else {
+                            reject({ create_status: "Error", error: data.message, sent: a, apiReturn: data });
+                        }
+                    });
+            });
+        }
+
+        const cmsUrl = 'https://workshops.cascadecms.com/';
+        const headers = { Authorization: 'Bearer 5f0e0627-10b5-432b-849f-bef42eb73c9c' };
+
+        createAsset({
+            asset: {
+                folder: {
+                    name: "new-folder", // fill in
+                    parentFolderPath: "_exercise-3", // fill in
+                    siteName: "CUC26 Web Services Essentials Workshop - Work Site", // fill in
+                    metadataSetId: "8c36425e0a0000d54fbffbc63fb66599"
+                }
+            }
+        }).then(function (result) {
+            console.log(result);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>
