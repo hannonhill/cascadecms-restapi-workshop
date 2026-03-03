@@ -19,22 +19,22 @@
         /* Step 1.3: Add a destination folder ID from your site for where your page should be copied to on line 29 */
         /* Step 1.4: Save, open file in browser, view console log */
 
-        copyAsset({
-            type: "block",
-            id: "", // fill in
-            copyParameters: {
-                newName: "", // fill in
-                destinationContainerIdentifier: {
-                    type: "folder",
-                    id: "" // fill in
-                }
-            }
-        }).then(function (result) {
-            console.log(result);
-        }).catch(function (error) {
-            console.log(error);
-            // Note: The error "The validated expression is false" usually means the new asset name does NOT meet the naming convention requirements and/or contains an illegal character
-        });
+        // copyAsset({
+        //     type: "block",
+        //     id: "8c363d310a0000d54fbffbc604b5d2e0", // fill in
+        //     copyParameters: {
+        //         newName: "copied-accounting", // fill in
+        //         destinationContainerIdentifier: {
+        //             type: "folder",
+        //             id: "917ce9bc0a0000d50780423927bed193" // fill in
+        //         }
+        //     }
+        // }).then(function (result) {
+        //     console.log(result);
+        // }).catch(function (error) {
+        //     console.log(error);
+        //     // Note: The error "The validated expression is false" usually means the new asset name does NOT meet the naming convention requirements and/or contains an illegal character
+        // });
 
         /* Exercise 2: Copy asset using asset path and folder path */
 
@@ -45,26 +45,26 @@
         /* Step 2.5: Add a destination folder path and your site name for where your page should be copied to on line 57/58 */
         /* Step 2.6: Save, view console log, refresh browser */
 
-        // copyAsset({
-        //     type: "block",
-        //     path: "", // fill in
-        //     siteName: "", // fill in
-        //     copyParameters: {
-        //         newName: "", // fill in
-        //         destinationContainerIdentifier: {
-        //             type: "folder",
-        //             path: {
-        //                 path: "", // fill in
-        //                 siteName: "", // fill in
-        //             }
-        //         }
-        //     }
-        //     // // Note: Folder information is required even if the copy should go in the same folder as the original asset
-        // }).then(function (result) {
-        //     console.log(result);
-        // }).catch(function (error) {
-        //     console.log(error);
-        // });
+        copyAsset({
+            type: "block",
+            path: "_blocks/programs/accounting", // fill in
+            siteName: siteName, // fill in
+            copyParameters: {
+                newName: "new-account-block", // fill in
+                destinationContainerIdentifier: {
+                    type: "folder",
+                    path: {
+                        path: "_exercise-3", // fill in
+                        siteName: siteName, // fill in
+                    }
+                }
+            }
+            // // Note: Folder information is required even if the copy should go in the same folder as the original asset
+        }).then(function (result) {
+            console.log(result);
+        }).catch(function (error) {
+            console.log(error);
+        });
 
 
     </script>
