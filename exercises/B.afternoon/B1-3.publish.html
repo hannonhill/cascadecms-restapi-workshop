@@ -19,10 +19,19 @@
         /* Bonus Exercise: Add a destination parameter to publishInformation using the Workshops destination in the same site as the asset you are publishing */
 
         publishAsset({
-            type: "", // Step 1: fill in
-            id: "", // Step 1: fill in
+            type: "page", // Step 1: fill in
+            id: "8c3643d10a0000d54fbffbc68375b4d2", // Step 1: fill in
             publishInformation: {
-                unpublish: false // Step 4: Enable to unpublish the asset
+                unpublish: true, // Step 4: Enable to unpublish the asset
+                destinations: [
+                    {
+                        path: {
+                            path: "Workshops",
+                            siteName: siteName
+                        },
+                        type: "destination"
+                    }
+                ]
             }
         }).then(function (result) {
             console.log("Publish response:", result);

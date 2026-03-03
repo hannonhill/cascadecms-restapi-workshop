@@ -241,6 +241,43 @@ function publishAsset(a) {
 	});
 }
 
+function readAccessRights(a) {
+    if (a.path) {
+        var url = cmsUrl + "api/v1/readAccessRights/" + a.type + "/" + a.siteName + "/" + a.path;
+    } else if (a.id) {
+        var url = cmsUrl + "api/v1/readAccessRights/" + a.type + "/" + a.id;
+    }
+    url = url.replace(/\\\\/g, "\\");
+    if (a.debug) {
+        console.log("Fetch URL " + url);
+    }
+    return new Promise(function (resolve, reject) {
+        fetch(url, { method: "POST", headers: headers })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.success) {
+                    resolve({ read_status: "Success", sent: a, apiReturn: data, url: url });
+                } else {
+                    reject({ read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
+                }
+            });
+    });
+}
+
+function editAccessRights(a) {
+    return new Promise(function (resolve, reject) {
+        fetch(cmsUrl + "api/v1/editAccessRights", { method: "POST", headers: headers, body: JSON.stringify({ accessRightsInformation: a.accessRightsInformation }) })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.success) {
+                    resolve({ edit_status: "Success", sent: a, apiReturn: data });
+                } else {
+                    reject({ edit_status: "Error", error: data.message, sent: a, apiReturn: data });
+                }
+            });
+    });
+}
+
 function dateToDateTime(d) {
 	var d = new Date(d);
 	return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString();

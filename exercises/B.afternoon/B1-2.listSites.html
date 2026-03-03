@@ -23,8 +23,17 @@
                 
                 console.log("Site object:", site); // Hint: Look at the site object in the console log to find the property that contains the name of the site
                 // Output the name of each site
-                console.log("Site name:", ); // Step 1: fill in
+                console.log("Site name:", site.path.path); // Step 1: fill in
 
+                // Bonus Exercise
+                readAsset({
+                    type: "site",
+                    id: site.id,
+                }).then(function (result) {
+                    console.log("Read response:", result);
+                }).catch(function (error) {
+                    console.log(error);
+                });
             });
         }).catch(function (error) {
             console.log(error);

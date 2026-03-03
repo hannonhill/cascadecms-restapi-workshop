@@ -25,15 +25,15 @@
         }).then(function (result) {
 
             console.log("Read response:", result); // Hint: Look at this in the console log to find the path to the folder's children array
-            var folderChildren = result; // Step 1: fill in
+            var folderChildren = result.apiReturn.asset.folder.children; // Step 1: fill in
 
             folderChildren.forEach(function (child) { // Loop over the folder's children
                 
                 console.log("Child asset:", child); // Hint: Look at each child in the console log to find the properties that specify the child's type and ID, which we will need to read the child asset
 
                 readAsset({ // Read each child asset to get more information about it
-                    type: child, // Step 2: fill in
-                    id: child, // Step 2: fill in
+                    type: child.type, // Step 2: fill in
+                    id: child.id, // Step 2: fill in
                 }).then(function (result) {
                     console.log("Read child asset response:", result);
                 }).catch(function (error) {
