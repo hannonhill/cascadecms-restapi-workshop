@@ -14,9 +14,7 @@
         <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
         <h2 style="display:inline">Sites. </h2><span>Select the site(s) you'd like to update.</span><br /><br />
         <select name="sites" id="sites" multiple="" style="resize: both; width: 90%; height: 300px;"></select><br /><br />
-        <button onclick="schedulePublishing(true)">Schedule Publishing</button>
-        <button onclick="schedulePublishing(false)">Disable Publishing</button>
-        <button onclick="copyAssetFactory()">Copy Asset Factory</button>
+        <button onclick="siteAccess(true)">Site Access</button>
         <!-- Log some stuff here -->
         <hr style="margin: 30px 0;" />
         <h2>Results</h2>
@@ -68,13 +66,10 @@
             return selectedSites;
         }
 
-        function schedulePublishing(enablePublishing) {
-            var publishDays = ["Monday", "Saturday"]; // The days to publish on
-            var baseTime = "00:00:00.000-05:00"; // The time to start publishing at
-
+        function siteAccess() {
             var selectedSites = getSelectedSites();
             if (!selectedSites.length) return;
-            results.innerHTML += '<p><strong>Starting site scheduled publishing for selected sites...</strong></p>';
+            results.innerHTML += '<p><strong>Starting site access updates for selected sites...</strong></p>';
 
             var completed = 0;
             selectedSites.forEach(function (siteName, index) {
@@ -86,23 +81,14 @@
 
                     result.apiReturn.accessRightsInformation.allLevel = "write";
 
-                    // site.usesScheduledPublishing = enablePublishing;
-
-                    // if (enablePublishing) {
-                    //     site.publishDaysOfWeek = ""; // Step 2: fill in
-                    //     site.scheduledPublishDestinationMode = ""; // Step 2: fill in (use "Publish to all enabled Destinations" option)
-
-                    //     var publishTime = addMinutesToTime(baseTime, index * 10); // Stagger publish times by 10 minutes to avoid overloading the system with all sites publishing at once
-                    //     site.timeToPublish = ""; // Step 2: fill in
-                    // }
-
                     editAccessRights({ // Edit the site
                         accessRightsInformation: result.apiReturn.accessRightsInformation
                     }).then(function (result) {
-                        // results.innerHTML += '<p>Scheduled publishing ' + (enablePublishing ? 'enabled' : 'disabled') + ' for ' + siteName + (enablePublishing ? ' at ' + publishTime : '') + '</p>';
-                        // completed++;
+                        console.log(result);
+                        results.innerHTML += '<p>Site access updated for ' + siteName + '</p>';
+                        completed++;
                         if (completed === selectedSites.length) {
-                            results.innerHTML += '<p><strong>✓ Done updating scheduled publishing for all selected sites.</strong></p>';
+                            results.innerHTML += '<p><strong>✓ Done updating site access for all selected sites.</strong></p>';
                         }
                     }).catch(function (error) {
                         console.log("Edit site error:", error);
@@ -113,56 +99,6 @@
             });
         }
 
-        // Calculates new time for each publish
-        function addMinutesToTime(timeStr, minutesToAdd) {
-            // timeStr: "HH:mm:ss.SSS-05:00"
-            var timePart = timeStr.split("-")[0];
-            var tzPart = "-" + timeStr.split("-")[1];
-            var parts = timePart.split(":");
-            var hour = parseInt(parts[0], 10);
-            var min = parseInt(parts[1], 10);
-            var secMs = parts[2];
-            min += minutesToAdd;
-            while (min >= 60) { min -= 60; hour += 1; }
-            while (hour >= 24) { hour -= 24; }
-            var newTime = (hour < 10 ? "0" : "") + hour + ":" + (min < 10 ? "0" : "") + min + ":" + secMs + tzPart;
-            return newTime;
-        }
-
-        function copyAssetFactory() {
-            var assetFactoryPath = "Buttons";
-
-            var selectedSites = getSelectedSites();
-            if (!selectedSites.length) return;
-            results.innerHTML += '<p><strong>Starting Asset Factory copy to selected sites...</strong></p>';
-
-            var completed = 0;
-            selectedSites.forEach(function (siteName) {
-                copyAsset({
-                    path: "", // Step 3: fill in
-                    siteName: "CUC26 Web Services Essentials Workshop - Presentation",
-                    type: "", // Step 3: fill in
-                    copyParameters: {
-                        destinationContainerIdentifier: { // This is the location you are copying to
-                            path: {
-                                path: "/",
-                                siteName: siteName
-                            },
-                            type: "" // Step 3: fill in
-                        },
-                        "newName": assetFactoryPath
-                    }
-                }).then(function (result) {
-                    results.innerHTML += '<p>Asset Factory copied to ' + siteName + '</p>';
-                    completed++;
-                    if (completed === selectedSites.length) {
-                        results.innerHTML += '<p><strong>✓ Done copying Asset Factory to all selected sites.</strong></p>';
-                    }
-                }).catch(function (error) {
-                    console.log("Copy error:", error);
-                });
-            });
-        }
     </script>
 </body>
 

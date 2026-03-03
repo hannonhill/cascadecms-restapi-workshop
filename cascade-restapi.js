@@ -266,7 +266,7 @@ function readAccessRights(a) {
 
 function editAccessRights(a) {
     return new Promise(function (resolve, reject) {
-        fetch(cmsUrl + "api/v1/editAccessRights", { method: "POST", headers: headers, body: JSON.stringify({ accessRightsInformation: a.accessRightsInformation }) })
+        fetch(cmsUrl + "api/v1/editAccessRights", { method: "POST", headers: headers, body: JSON.stringify({ identifier: a.accessRightsInformation.identifier, accessRightsInformation: a.accessRightsInformation }) })
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
