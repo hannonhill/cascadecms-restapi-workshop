@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
-    <title>Exercise B5: Sites Management</title>
+    <title>Exercise: Sites Access Fix</title>
     <link rel="stylesheet" href="../../styles.css" />
     <script src="../../creds.js"></script>
     <script src="../../cascade-restapi.js"></script>
@@ -10,7 +10,7 @@
 
 <body>
     <div>
-        <h1>Exercise B5: Sites Management</h1>
+        <h1>Exercise: Sites Access Fix</h1>
         <p>Open your dev tools by inspecting the page. Then navigate to the console to follow along with the exercise.</p>
         <h2 style="display:inline">Sites. </h2><span>Select the site(s) you'd like to update.</span><br /><br />
         <select name="sites" id="sites" multiple="" style="resize: both; width: 90%; height: 300px;"></select><br /><br />
@@ -22,19 +22,12 @@
     </div>
 
     <script>
-        /* Exercise B5: A tool to help you make sweeping changes across all your sites! */
+        /* Exercise: Update the site access on selected sites! */
 
-        /* Step 1: Output the site name for the <select> option text and value (lines 49-50) */
-        /* Step 2: Fill in the missing schedulePublishing fields (lines 82-96) 
-                   Hint: Fill out the information you desire in your site publish scheduling, then look at the read response to figure out what to fill in */
-        /* Step 2: Fill in the missing copyAssetFactory fields (lines 153-162)
-                   Hint: You may have to check entityTypeString in the documentation to find the right types! */
-        /* Step 3: Save, open file in browser, select your site and push a button! */
-        /* Step 4: Check if your AF copied successfully, and if the scheduled publishing settings updated in Cascade! */
-        /* Bonus Exercise: Check if AF already exists before copying */
-        /* Additional Improvements: Create a field to enter the asset factory ID and replace the hardcoded value with what is in the text field
-                                    Create a field to fill in the days/time to schedule the publishing 
-                                    Update to use "Publish to selected Destinations */
+        /* Step 1: Output the site name for the <select> option text and value (lines 40-41) */
+        /* Step 2: Fill in the missing siteAccess fields (lines 70-71) */
+        /* Step 3: Fill in the site access level you desire (read, write, none) (line 75) */
+        /* Step 4: Save, open file in browser, select your site and push a button! Check in Cascade if the site access is correct */
 
         var sitesSelect = document.getElementById("sites");
         var results = document.getElementById("messages");
@@ -79,7 +72,7 @@
                 }).then(function (result) {
                     console.log("Read site response:", result);
 
-                    result.apiReturn.accessRightsInformation.allLevel = "write";
+                    result.apiReturn.accessRightsInformation.allLevel = "write"; // Step 3: fill in
 
                     editAccessRights({ // Edit the site
                         accessRightsInformation: result.apiReturn.accessRightsInformation
