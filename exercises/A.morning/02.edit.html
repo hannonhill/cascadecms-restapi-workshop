@@ -19,7 +19,7 @@
 
         readAsset({
             type: "block",
-            id: "", // fill in
+            id: "8c363cd20a0000d54fbffbc6c7393eb5", // fill in
         }).then(function (result) {
             console.log(result);
             /* Note: Result is the object the read function returns
@@ -45,9 +45,10 @@
             var color = firstNode.structuredDataNodes[1];
             var label = firstNode.structuredDataNodes[2];
             /* Note: Split each node into its own var for easy visualization */
-            // console.log(icon.text);
+            console.log(icon.text); //calendar
             /* Note: Output current button icon */
-            // icon.text = "error";
+            icon.text = "error";
+            console.log(icon.text); //error
             /* Note: change button icon value */
             /* Note: As an object property, it's value can be replaced 
                 now the whole object is updated
@@ -61,7 +62,8 @@
                 *Hint* you will want to use the vars defined above and set them to a new value
             */
             // Your code here
-
+            color.text = "yellow";
+            label.text = "I updated this via REST! Hooray!";
             
             /* Exercise 2
                 As stated above, the bracket notation is great for getting values of fields that done repeat
@@ -80,13 +82,13 @@
             //     });
             // });
 
-            // editAsset({
-            //     asset: result.apiReturn,
-            // }).then(function (result) {
-            //     console.log(result);
-            // }).catch(function (error) {
-            //     console.log(error);
-            // });
+            editAsset({
+                asset: result.apiReturn,
+            }).then(function (result) {
+                console.log(result);
+            }).catch(function (error) {
+                console.log(error);
+            });
 
             /*  Note: using the edit function, we send back the edited object */
 
