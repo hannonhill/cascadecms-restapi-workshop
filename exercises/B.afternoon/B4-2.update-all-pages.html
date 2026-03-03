@@ -55,48 +55,50 @@
                             id: child.id,
                             type: "page",
                         }).then(function (result) {
-                            console.log("Read response:", result);
+                            // console.log("Read response:", result);
 
                             var page = result.apiReturn.asset.page;
-                            if (page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") { // Step 2: fill in
+                            if (page.contentTypeId == "8c33ae780a0000d54fbffbc6d1201a36") {
                                 var structuredDataNodes = page.structuredData.structuredDataNodes;
-                                // Make the modifications to the page
+                                var lastRow = structuredDataNodes[structuredDataNodes.length - 1];
+                                if (lastRow.structuredDataNodes[0].text != "buttons" && lastRow.structuredDataNodes[1].text != "block" && lastRow.structuredDataNodes[2].blockId != CTABlockID) { // Make sure the CTA block is not already there
+                                    // Make the modifications to the page
+                                    var newRow = {
+                                        "type": "group",
+                                        "identifier": "row",
+                                        "structuredDataNodes": [
+                                            {
+                                                "type": "text",
+                                                "identifier": "type",
+                                                "text": "buttons"
+                                            },
+                                            {
+                                                "type": "text",
+                                                "identifier": "dataSource",
+                                                "text": "block"
+                                            },
+                                            {
+                                                "type": "asset",
+                                                "identifier": "block",
+                                                "assetType": "block",
+                                                "blockId": CTABlockID
+                                            }
+                                        ]
+                                    };
+                                    structuredDataNodes.push(newRow);
 
-                                // Hint: Look at the first row on the landing master page
-                                console.log("First row:", structuredDataNodes[1]);
-                                var newRow = {
-                                    "type"                  : "group",
-                                    "identifier"            : "row",
-                                    "structuredDataNodes"   : [
-                                        {
-                                            "type"          : "text",
-                                            "identifier"    : "type",
-                                            "text"          : "buttons"
-                                        },
-                                        {
-                                            "type"          : "text",
-                                            "identifier"    : "dataSource",
-                                            "text"          : "" // Step 3: fill in
-                                        },
-                                        {
-                                            "type"          : "asset",
-                                            "identifier"    : "block",
-                                            "assetType"     : "", // Step 3: fill in
-                                            "blockId"       : "" // Step 3: fill in
-                                        }
-                                    ]
-                                };
-                                structuredDataNodes.push(newRow);
-
-                                // The modified asset is submitted to Cascade with an edit
-                                return editAsset({
-                                    asset: result.apiReturn,
-                                }).then(function (result) {
-                                    console.log("Edit response:", result);
-                                    results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
-                                }).catch(function (error) {
-                                    console.log("Edit error:", error);
-                                });
+                                    // The modified asset is submitted to Cascade with an edit
+                                    return editAsset({
+                                        asset: result.apiReturn,
+                                    }).then(function (result) {
+                                        console.log("Edit response:", result);
+                                        results.innerHTML += "<p>Page " + child.path.path + " edited</p>";
+                                    }).catch(function (error) {
+                                        console.log("Edit error:", error);
+                                    });
+                                } else {
+                                    results.innerHTML += "<p>Skipping " + child.path.path + " because it already has CTA block</p>";
+                                }
                             }
                         }).catch(function (error) {
                             console.log("Read error:", error);

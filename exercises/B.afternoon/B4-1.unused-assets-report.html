@@ -54,10 +54,23 @@
                         }).then(function (result) {
                             console.log("Relationships response:", result);
 
-                            var numberOfRelationships = ""; // Step 1: fill in
+                            var numberOfRelationships = result.apiReturn.relationships.length; // Step 1: fill in
 
                             var style = numberOfRelationships === 0 ? ' style="color: yellow;"' : '';
                             results.innerHTML += "<p" + style + ">" + numberOfRelationships + " relationships for " + child.path.path + "</p>";
+
+                            if (numberOfRelationships > 0) {
+                                var linked = 0;
+                                var static = 0;
+                                result.apiReturn.relationships.forEach(element => {
+                                    if (element.relationshipType.includes("LINKED")) {
+                                        linked++;
+                                    } else if (element.relationshipType.includes("STATIC")) {
+                                        static++;
+                                    }
+                                });
+                                results.innerHTML += "<p style='margin-left: 20px;'>" + linked + " linked, " + static + " static</p>";
+                            }
                         }).catch(function (error) {
                             console.log("Relationships error:", error);
                         });
