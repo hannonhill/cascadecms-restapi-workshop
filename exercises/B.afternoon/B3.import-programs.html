@@ -28,7 +28,7 @@
     <script>
         /* Exercise B3: Automate creating multiple program blocks by reading from CSV file (/csv/programs.csv) */
 
-        /* Step 1: Fill in block data in editProgramBlock (line 108-114) */
+        /* Step 1: Fill in block data in editProgramBlock (lines 108-114) */
         /* Step 2: Test with debug limiter on (line 53) */
         /* Step 3: Check results in Cascade, repeat steps 1-3 until good */
         /* Step 3.1: Remove any created blocks when you are done testing the script, otherwise you will get duplicates! */
@@ -50,49 +50,58 @@
                 complete: function (result) {
                     console.log("All data:", result);
                     result.data.forEach(function (program, index) { // Loop over each line in the CSV
-                        if (index < 1) { // Debugging line, remove to import all programs
+                        // if (index < 1) { // Debugging line, remove to import all programs
                             createProgramBlock(program);
-                        }
+                        // }
                     });
                 }
             });
         }
 
         function createProgramBlock(p) {
-            console.log("A program:", p); // Output each program as an object
+            console.log("Program data", p); // Output each program as an object
 
             var newBlockName = p.programname.toLowerCase().replaceAll(/[^a-z0-9-]/gi, "-").trim(); // Turn the program name into an acceptable system name
 
-            // First copy the block using the base asset ID and folder path defined above
-            copyAsset({
+            // Extra practice
+            readAsset({
                 type: "block",
-                id: baseAssetID,
-                copyParameters: {
-                    newName: newBlockName,
-                    destinationContainerIdentifier: {
-                        type: "folder",
-                        path: {
-                            path: programFolderPath,
-                            siteName: siteName,
+                path: programFolderPath + "/" + newBlockName,
+                siteName: siteName,
+            }).then(function (result) {
+                editProgramBlock(result, p, newBlockName);
+            }).catch(function (error) {
+                // First copy the block using the base asset ID and folder path defined above
+                copyAsset({
+                    type: "block",
+                    id: baseAssetID,
+                    copyParameters: {
+                        newName: newBlockName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: programFolderPath,
+                                siteName: siteName,
+                            }
                         }
                     }
-                }
-            }).then(function (result) {
-                console.log("Copy response:", result);
-                document.getElementById("results").value += "✓ Created program block: " + newBlockName + "\n"; // Log success message on page
-                // Then read the copied asset - The copy operation does NOT return a new asset ID, so to read the copy, we use the same global vars we used to create it
-                readAsset({
-                    type: "block",
-                    path: programFolderPath + "/" + newBlockName,
-                    siteName: siteName,
                 }).then(function (result) {
-                    console.log("Read response:", result);
-                    editProgramBlock(result, p, newBlockName);
+                    console.log("Copy response", result);
+                    document.getElementById("results").value += "✓ Created program block: " + newBlockName + "\n"; // Log success message on page
+                    // Then read the copied asset - The copy operation does NOT return a new asset ID, so to read the copy, we use the same global vars we used to create it
+                    readAsset({
+                        type: "block",
+                        path: programFolderPath + "/" + newBlockName,
+                        siteName: siteName,
+                    }).then(function (result) {
+                        console.log("Program block", result);
+                        editProgramBlock(result, p, newBlockName);
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
                 }).catch(function (error) {
-                    console.log("Read error:", error);
+                    console.log(error);
                 });
-            }).catch(function (error) {
-                console.log("Copy error:", error);
             });
         }
 
@@ -105,12 +114,13 @@
             program[1].text = p.alt; // alt
 
             /* Step 1: Fill in the rest of the program data here - program name, description, department, and degree types */
-
-
-            
+            program[2].text = p.programname; // program name
+            program[3].text = p.description; // description
+            program[4].text = p.department; // department
 
             // Hint: For Degree Type, read a program block that already has some degrees selected to see what format Cascade expects for multiselects
-
+            var degrees = p.degree.split('; ').map(d => d.trim()).join('::CONTENT-XML-SELECTOR::');
+            program[5].text = '::CONTENT-XML-SELECTOR::' + degrees;
 
             /* End program data fill in */
 
